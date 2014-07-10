@@ -5,10 +5,7 @@ from .anodi import annotated
 import inspect
 
 
-import logging;
-logging.info(endpoints.__file__)
-
-def auto_api(func=None, returns=message_types.VoidMessage, name=None, http_method='GET'):
+def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='GET'):
     def auto_api_decr(func):
         func_name = func.__name__ if not name else name
         func = annotated(returns=returns)(func)

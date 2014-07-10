@@ -11,7 +11,7 @@ class SimpleMessage(messages.Message):
 
 @endpoints.api(name='test', version='v1')
 class TestApi(remote.Service):
-    @ferris3.endpoints.auto_api(returns=SimpleMessage)
+    @ferris3.endpoints.auto_method(returns=SimpleMessage)
     def test(self, request):
         return SimpleMessage(message="Hi")
 
