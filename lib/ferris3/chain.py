@@ -1,6 +1,7 @@
 import functools
 import logging
 import types
+import inspect
 
 
 def partial(func):
@@ -30,44 +31,105 @@ def raise_if(value_or_func, ex, data):
     return data
 
 
+class mixedmethod(object):
+    def __init__(self, func):
+        self.func = func
+    def __get__(self, instance, cls):
+        return functools.partial(self.func, instance, cls)
+
+
 class Chain(object):
-    def __init__(self, value=None):
+    def __init__(self, value=None, use=None):
+        self._modules = {}
         self._value = value
+        if use:
+            for m in use:
+                self.add_chain_module(m)
+
+    def _chain_ref(self):
+        return self
 
     def get_value(self):
         return self._value
 
     def set_value(self, value):
         self._value = value
+        return self
 
-    value = property(get_value, set_value)
+    value = get_value
     
-    @classmethod
-    def add_chain_function(cls, func, name=None):
+    @mixedmethod
+    def add_chain_function(self, cls, func, name=None):
         if not name:
             name = func.__name__
 
         # Curry if needed
         if not hasattr(func, '_f3_partial'):
-            func = curry(func)
+            func = partial(func)
 
         # Wrap with the call adapter
         @functools.wraps(func)
         def call_wrapper(func):
             def inner(self, *args, **kwargs):
-                logging.info(self)
-                self.value = func(*args, **kwargs)(self.value)
-                return self
+                self.set_value(func(*args, **kwargs)(self.get_value()))
+                return self._chain_ref()
             return inner
 
         func = call_wrapper(func)
 
-        setattr(cls, name, func)
+        if self:
+            setattr(self, name, types.MethodType(func, self))
+        else:
+            setattr(cls, name, func)
 
     @classmethod
     def add_chain_functions(cls, *funcs):
         for func in funcs:
             cls.add_chain_function(func)
+
+    @mixedmethod
+    def add_chain_module(self, cls, module, module_name=None):
+        if not module_name:
+            module_name = module.__name__.split('.').pop()
+
+        def get_mod(self):
+            if module_name in self._modules:
+                return self._modules[module_name]
+
+            cm = ChainModule(self)
+            for fname, func in inspect.getmembers(module, callable):
+                cm.add_chain_function(func, fname)
+
+            self._modules[module_name] = cm
+            return cm
+
+        # If it's a class, add it to all instances and lazy load
+        if not self:
+            setattr(cls, module_name, property(get_mod))
+
+        # If this is an instance, just go ahead and add it.
+        else:
+            setattr(self, module_name, get_mod(self))
+
+
+class ChainModule(Chain):
+    def __init__(self, parent):
+        self._parent = parent
+
+    def _chain_ref(self):
+        return self._parent
+
+    def get_value(self):
+        return self._parent.get_value()
+
+    def set_value(self, value):
+        self._parent.set_value(value)
+        return self._parent
+
+    value = get_value
+
+    add_chain_module = None
+
 
 # Add built-ins
 Chain.add_chain_functions(

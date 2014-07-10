@@ -1,3 +1,11 @@
+from __future__ import absolute_import
+import protopigeon
+from .endpoints import auto_method
+from .chain import Chain
+from ferris3.utils import ndb, messages
+from endpoints import NotFoundException
+
+
 def list(Model, Message=None, ListMessage=None):
     if not Message:
         Message = protopigeon.model_message(Model)
@@ -5,7 +13,7 @@ def list(Model, Message=None, ListMessage=None):
     if not ListMessage:
         ListMessage = protopigeon.list_message(Message)
 
-    @@auto_api(returns=ListMessage, name='list')
+    @auto_method(returns=ListMessage, name='list')
     def inner(self, request):
         return f3.Chain(Model.query()) \
             .messages.serialize_list(ListMessage) \
@@ -17,12 +25,11 @@ def get(Model, Message=None):
     if not Message:
         Message = protopigeon.model_message(Model)
 
-    @@auto_api(returns=Message, name='get')
+    @auto_method(returns=Message, name='get')
     def inner(self, request, item_key=(str,)):
-        return f3.Chain(item_key) \
-            .ndb.key() \
+        return Chain(item_key, use=(ndb, messages)) \
             .ndb.get() \
-            .raise_if_none(endpoints.NotFoundException()) \
+            .raise_if(None, NotFoundException()) \
             .messages.serialize(Message) \
             .value()
     return inner
@@ -30,7 +37,7 @@ def get(Model, Message=None):
 
 def delete(Model):
 
-    @@auto_api(name='delete', http_method='DELETE')
+    @auto_method(name='delete', http_method='DELETE')
     def inner(self, request, item_key=(str,)):
 
         f3.Chain(item_key) \
@@ -47,7 +54,7 @@ def insert(Model, Message=None):
     if not Message:
         Message = protopigeon.model_message(Model)
 
-    @@auto_api(returns=Message, name='insert', http_method='POST')
+    @auto_method(returns=Message, name='insert', http_method='POST')
     def inner(self, request=(Message,)):
         return f3.Chain(request) \
             .messages.deserialize(Model) \
@@ -62,7 +69,7 @@ def update(Model, Message=None):
     if not Message:
         Message = protopigeon.model_message(Model)
 
-    @@auto_api(returns=Message, name='update', http_method='POST')
+    @auto_method(returns=Message, name='update', http_method='POST')
     def inner(self, request=(Message,), item_key=(str,)):
         item = f3.Chain(item_key) \
             .ndb.key() \

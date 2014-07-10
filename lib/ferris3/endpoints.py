@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from protorpc import message_types
+from protorpc import messages
 import endpoints
 from .anodi import annotated
 import inspect
