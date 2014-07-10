@@ -1,4 +1,12 @@
+from __future__ import absolute_import
+from protorpc import message_types
+import endpoints
+from .anodi import annotated
+import inspect
 
+
+import logging;
+logging.info(endpoints.__file__)
 
 def auto_api(func=None, returns=message_types.VoidMessage, name=None, http_method='GET'):
     def auto_api_decr(func):

@@ -2,6 +2,7 @@ import endpoints
 from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
+import ferris3
 
 
 class SimpleMessage(messages.Message):
@@ -10,7 +11,7 @@ class SimpleMessage(messages.Message):
 
 @endpoints.api(name='test', version='v1')
 class TestApi(remote.Service):
-    @endpoints.method(message_types.VoidMessage, SimpleMessage)
+    @ferris3.endpoints.auto_api(returns=SimpleMessage)
     def test(self, request):
         return SimpleMessage(message="Hi")
 
