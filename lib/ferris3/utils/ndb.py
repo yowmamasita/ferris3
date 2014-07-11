@@ -1,5 +1,7 @@
 from google.appengine.ext import ndb
+from google.appengine.datastore.datastore_query import Cursor
 import types
+from collections import namedtuple
 
 
 def key(s):
@@ -35,3 +37,15 @@ def check_kind(kind, item):
         raise ValueError("Incorrect kind %s, expected %s" % (item_key.kind(), kind))
 
     return item
+
+
+PaginationResults = namedtuple('PaginationResults', ['items', 'next_page_token'])
+
+
+def paginate(query, limit=50, page_token=None):
+    if page_token and not isinstance(page_token, Cursor):
+        page_token = Cursor(urlsafe=page_token)
+
+    data, next_cursor, more = query.fetch_page(limit, start_cursor=page_token)
+
+    return PaginationResults(items=data, next_page_token=next_cursor.urlsafe() if more else None)

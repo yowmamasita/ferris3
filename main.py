@@ -25,6 +25,7 @@ class TestApi(remote.Service):
         return SimpleMessage(message="Hi")
 
     list = hvild.list(Post)
+    paginated_list = hvild.paginated_list(Post, limit=2, name='paginated_list')
     get = hvild.get(Post)
     delete = hvild.delete(Post)
     insert = hvild.insert(Post)

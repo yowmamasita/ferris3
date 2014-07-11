@@ -4,6 +4,7 @@ from .endpoints import auto_method
 from .api_chain import ApiChain
 from endpoints import NotFoundException
 from protorpc import message_types
+from ferris3.utils.messages import list_message
 
 
 def list(Model, Message=None, ListMessage=None):
@@ -11,7 +12,7 @@ def list(Model, Message=None, ListMessage=None):
         Message = protopigeon.model_message(Model)
 
     if not ListMessage:
-        ListMessage = protopigeon.list_message(Message)
+        ListMessage = list_message(Message)
 
     @auto_method(returns=ListMessage, name='list')
     def inner(self, request):
@@ -21,6 +22,22 @@ def list(Model, Message=None, ListMessage=None):
 
     return inner
 
+
+def paginated_list(Model, Message=None, ListMessage=None, limit=50, **kwargs):
+    if not Message:
+        Message = protopigeon.model_message(Model)
+
+    if not ListMessage:
+        ListMessage = list_message(Message)
+
+    @auto_method(returns=ListMessage, name=kwargs.get('name', 'list'))
+    def inner(self, request, page_token=(str, '')):
+        return ApiChain(Model.query()) \
+            .ndb.paginate(limit=limit) \
+            .messages.serialize_list(ListMessage) \
+            .value()
+
+    return inner
 
 def get(Model, Message=None):
     if not Message:
