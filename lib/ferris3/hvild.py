@@ -71,13 +71,13 @@ def update(Model, Message=None):
 
     @auto_method(returns=Message, name='update', http_method='POST')
     def inner(self, request=(Message,), item_key=(str,)):
-        item = f3.Chain(item_key) \
+        item = ApiChain(item_key) \
             .ndb.key() \
             .ndb.get() \
-            .raise_if_none(endpoints.NotFoundException()) \
+            .raise_if(None, NotFoundException()) \
             .value()
 
-        return f3.Chain(request) \
+        return ApiChain(request) \
             .messages.deserialize(item) \
             .ndb.put() \
             .messages.serialize(Message) \

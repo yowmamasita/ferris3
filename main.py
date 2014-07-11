@@ -27,5 +27,6 @@ class TestApi(remote.Service):
     get = hvild.get(Post)
     delete = hvild.delete(Post)
     insert = hvild.insert(Post)
+    update = hvild.update(Post)
 
 APPLICATION = endpoints.api_server([TestApi])
