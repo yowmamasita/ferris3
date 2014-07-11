@@ -23,6 +23,7 @@ class TestApi(remote.Service):
     def test(self, request):
         return SimpleMessage(message="Hi")
 
+    list = hvild.list(Post)
     get = hvild.get(Post)
 
 APPLICATION = endpoints.api_server([TestApi])

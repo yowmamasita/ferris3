@@ -15,7 +15,7 @@ def list(Model, Message=None, ListMessage=None):
 
     @auto_method(returns=ListMessage, name='list')
     def inner(self, request):
-        return f3.Chain(Model.query()) \
+        return ApiChain(Model.query()) \
             .messages.serialize_list(ListMessage) \
             .value()
     return inner
