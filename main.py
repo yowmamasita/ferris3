@@ -19,6 +19,7 @@ class Post(ndb.Model):
 
 @endpoints.api(name='test', version='v1')
 class TestApi(remote.Service):
+
     @ferris3.endpoints.auto_method(returns=SimpleMessage)
     def test(self, request):
         return SimpleMessage(message="Hi")

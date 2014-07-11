@@ -18,6 +18,7 @@ def list(Model, Message=None, ListMessage=None):
         return ApiChain(Model.query()) \
             .messages.serialize_list(ListMessage) \
             .value()
+
     return inner
 
 
@@ -32,6 +33,7 @@ def get(Model, Message=None):
             .raise_if(None, NotFoundException()) \
             .messages.serialize(Message) \
             .value()
+
     return inner
 
 
@@ -44,8 +46,6 @@ def delete(Model):
             .ndb.key() \
             .ndb.check_kind(Model) \
             .ndb.delete()
-
-        return message_types.VoidMessage()
 
     return inner
 

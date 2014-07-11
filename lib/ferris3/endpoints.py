@@ -39,7 +39,13 @@ def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_me
                 if arg_name in f_args_to_defaults and kwargs.get(arg_name) is None:
                     kwargs[arg_name] = f_args_to_defaults[arg_name]
 
-            return func(self, request, **kwargs)
+            return_val = func(self, request, **kwargs)
+
+            # return voidmessage if the return val is none
+            if ResponseMessage == message_types.VoidMessage and return_val is None:
+                return message_types.VoidMessage()
+
+            return return_val
 
         return ep_dec(inner)
 
