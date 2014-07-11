@@ -56,7 +56,7 @@ def insert(Model, Message=None):
 
     @auto_method(returns=Message, name='insert', http_method='POST')
     def inner(self, request=(Message,)):
-        return f3.Chain(request) \
+        return ApiChain(request) \
             .messages.deserialize(Model) \
             .ndb.put() \
             .messages.serialize(Message) \
