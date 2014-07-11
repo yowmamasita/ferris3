@@ -67,30 +67,42 @@ def insert_impl(Model, Message, request):
 # Can be used as endpoint methods directly.
 #
 
-def list(Model, Message=None, ListMessage=None, name='list'):
+def list(Model, Message=None, ListMessage=None, query=None, name='list'):
     if not Message:
         Message = protopigeon.model_message(Model)
 
     if not ListMessage:
         ListMessage = list_message(Message)
 
+    if not query:
+        query = Model.query()
+
+    if callable(query):
+        query = query()
+
     @auto_method(returns=ListMessage, name=name)
     def inner(self, request):
-        return list_impl(ListMessage, Model.query())
+        return list_impl(ListMessage, query)
 
     return inner
 
 
-def paginated_list(Model, Message=None, ListMessage=None, limit=50, name='list'):
+def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, name='list'):
     if not Message:
         Message = protopigeon.model_message(Model)
 
     if not ListMessage:
         ListMessage = list_message(Message)
 
+    if not query:
+        query = Model.query()
+
+    if callable(query):
+        query = query()
+
     @auto_method(returns=ListMessage, name=name)
     def inner(self, request, page_token=(str, '')):
-        return paginated_list_impl(ListMessage, Model.query(), limit, page_token)
+        return paginated_list_impl(ListMessage, query, limit, page_token)
 
     return inner
 
