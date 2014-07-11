@@ -21,8 +21,8 @@ class Post(ndb.Model):
 class TestApi(remote.Service):
 
     @ferris3.endpoints.auto_method(returns=SimpleMessage)
-    def test(self, request):
-        return SimpleMessage(message="Hi")
+    def test(self, request, name=(str, 'Butthead')):
+        return SimpleMessage(message="Hi, %s" % name)
 
     list = hvild.list(Post)
     paginated_list = hvild.paginated_list(Post, limit=2, name='paginated_list')

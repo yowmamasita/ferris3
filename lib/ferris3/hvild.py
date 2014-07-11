@@ -33,7 +33,7 @@ def paginated_list(Model, Message=None, ListMessage=None, limit=50, **kwargs):
     @auto_method(returns=ListMessage, name=kwargs.get('name', 'list'))
     def inner(self, request, page_token=(str, '')):
         return ApiChain(Model.query()) \
-            .ndb.paginate(limit=limit) \
+            .ndb.paginate(limit=limit, page_token=page_token) \
             .messages.serialize_list(ListMessage) \
             .value()
 
