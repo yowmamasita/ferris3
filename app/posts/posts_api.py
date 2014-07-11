@@ -2,6 +2,9 @@ import endpoints
 from protorpc import remote
 from google.appengine.ext import ndb
 from ferris3 import hvild
+from ferris3 import apis
+
+api = apis.default()
 
 
 class Post(ndb.Model):
@@ -9,7 +12,7 @@ class Post(ndb.Model):
     content = ndb.TextProperty()
 
 
-@endpoints.api(name='posts', version='v1')
+@api.api_class(resource_name='posts')
 class PostsApi(remote.Service):
 
     list = hvild.list(Post)

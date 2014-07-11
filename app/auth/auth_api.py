@@ -2,10 +2,12 @@ import endpoints
 from protorpc import messages, remote
 from protopigeon.types import UserMessage
 from ferris3.endpoints import auto_method
+from ferris3 import apis
 
+api = apis.default()
 
-@endpoints.api(name='auth', version='v1', auth_level=endpoints.AUTH_LEVEL.REQUIRED)
-class AuthApi(remote.Service):
+@api.api_class(resource_name='info', path='info')   
+class AuthInfoApi(remote.Service):
 
     @auto_method(returns=UserMessage)
     def info(self, request):    
