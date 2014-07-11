@@ -3,15 +3,17 @@ import types
 
 
 def key(s):
+    if isinstance(s, ndb.Model):
+        return s.key
     if isinstance(s, ndb.Key):
         return s
-    return ndb.Key(urlsafe=s)
+    if isinstance(s, types.StringTypes):
+        return ndb.Key(urlsafe=s)
+    return None
 
 
-def get(ndbkey):
-    if isinstance(ndbkey, types.StringTypes):
-        ndbkey = key(ndbkey)
-    return ndbkey.get()
+def get(item):
+    return key(item).get()
 
 
 def put(item):
@@ -19,10 +21,17 @@ def put(item):
     return item
 
 
-def delete(item_or_key):
-    if isinstance(item_or_key, types.StringTypes):
-        item_or_key = key(item_or_key)
-    if isinstance(item_or_key, ndb.Model):
-        item_or_key = item.key
-    item_or_key.delete()
-    return item_or_key
+def delete(item):
+    key(item).delete()
+    return item
+
+
+def check_kind(kind, item):
+    if issubclass(kind, ndb.Model):
+        kind = kind._get_kind()
+
+    item_key = key(item)
+    if not kind == item_key.kind():
+        raise ValueError("Incorrect kind %s, expected %s" % (item_key.kind(), kind))
+
+    return item

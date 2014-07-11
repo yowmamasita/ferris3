@@ -2,8 +2,8 @@ from __future__ import absolute_import
 import protopigeon
 from .endpoints import auto_method
 from .api_chain import ApiChain
-from ferris3.utils import ndb, messages
 from endpoints import NotFoundException
+from protorpc import message_types
 
 
 def list(Model, Message=None, ListMessage=None):
@@ -40,10 +40,10 @@ def delete(Model):
     @auto_method(name='delete', http_method='DELETE')
     def inner(self, request, item_key=(str,)):
 
-        f3.Chain(item_key) \
+        ApiChain(item_key) \
             .ndb.key() \
             .ndb.check_kind(Model) \
-            .ndb.delete() \
+            .ndb.delete()
 
         return message_types.VoidMessage()
 
