@@ -8,7 +8,7 @@ def partial(func):
     @functools.wraps(func)
     def inner(*args, **kwargs):
         return functools.partial(func, *args, **kwargs)
-    setattr(func, '_f3_partial', True)
+    setattr(inner, '_f3_partial', True)
     return inner
 
 
@@ -41,7 +41,8 @@ class mixedmethod(object):
 class Chain(object):
     def __init__(self, value=None, use=None):
         self._modules = {}
-        self._value = value
+        self.set_value(value)
+
         if use:
             for m in use:
                 self.add_chain_module(m)
@@ -71,7 +72,14 @@ class Chain(object):
         @functools.wraps(func)
         def call_wrapper(func):
             def inner(self, *args, **kwargs):
-                self.set_value(func(*args, **kwargs)(self.get_value()))
+                val = self.get_value()
+                try:
+                    val = func(*args, **kwargs)(val)
+                except:
+                    logging.error("Problem occurred while executing chain '%s' with data '%s' and args %s, %s" % (func.__name__, val, args, kwargs))
+                    raise
+
+                self.set_value(val)
                 return self._chain_ref()
             return inner
 

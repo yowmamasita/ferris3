@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import protopigeon
 from .endpoints import auto_method
-from .chain import Chain
+from .api_chain import ApiChain
 from ferris3.utils import ndb, messages
 from endpoints import NotFoundException
 
@@ -27,7 +27,7 @@ def get(Model, Message=None):
 
     @auto_method(returns=Message, name='get')
     def inner(self, request, item_key=(str,)):
-        return Chain(item_key, use=(ndb, messages)) \
+        return ApiChain(item_key) \
             .ndb.get() \
             .raise_if(None, NotFoundException()) \
             .messages.serialize(Message) \
