@@ -1,34 +1,5 @@
 import endpoints
-from protorpc import messages
-from protorpc import message_types
-from protorpc import remote
-import ferris3
-from google.appengine.ext import ndb
-from ferris3 import hvild
-import protopigeon
+from ferris3.discovery import discover_api_services
 
-
-class SimpleMessage(messages.Message):
-    message = messages.StringField(1)
-
-
-class Post(ndb.Model):
-    title = ndb.StringProperty()
-    content = ndb.TextProperty()
-
-
-@endpoints.api(name='test', version='v1')
-class TestApi(remote.Service):
-
-    @ferris3.endpoints.auto_method(returns=SimpleMessage)
-    def test(self, request, name=(str, 'Butthead')):
-        return SimpleMessage(message="Hi, %s" % name)
-
-    list = hvild.list(Post)
-    paginated_list = hvild.paginated_list(Post, limit=2, name='paginated_list')
-    get = hvild.get(Post)
-    delete = hvild.delete(Post)
-    insert = hvild.insert(Post)
-    update = hvild.update(Post)
-
-APPLICATION = endpoints.api_server([TestApi])
+APIS = discover_api_services()
+APPLICATION = endpoints.api_server(APIS)
