@@ -1,7 +1,5 @@
-import endpoints
-from protorpc import remote
 from google.appengine.ext import ndb
-from ferris3 import hvild
+from ferris3 import auto_class, hvild, Service
 
 
 class Tweet(ndb.Model):
@@ -10,8 +8,8 @@ class Tweet(ndb.Model):
     user = ndb.UserProperty()
 
 
-@endpoints.api(name='tweets', version='v1')
-class TweetApi(remote.Service):
+@auto_class
+class TweetsApi(Service):
 
     list = hvild.paginated_list(Tweet, limit=50, name='list')
     get = hvild.get(Tweet)

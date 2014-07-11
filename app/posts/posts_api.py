@@ -1,10 +1,5 @@
-import endpoints
-from protorpc import remote
 from google.appengine.ext import ndb
-from ferris3 import hvild
-from ferris3 import apis
-
-api = apis.default()
+from ferris3 import hvild, auto_class, Service
 
 
 class Post(ndb.Model):
@@ -12,8 +7,8 @@ class Post(ndb.Model):
     content = ndb.TextProperty()
 
 
-@api.api_class(resource_name='posts')
-class PostsApi(remote.Service):
+@auto_class
+class PostsApi(Service):
 
     list = hvild.list(Post)
     paginated_list = hvild.paginated_list(Post, limit=2, name='paginated_list')

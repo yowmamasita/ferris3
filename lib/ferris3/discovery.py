@@ -46,8 +46,14 @@ def find_api_classes(modules):
         classes.extend(apis)
     return classes
 
+
 def is_remote_service(cls):
     # This is kind of an ugly hack, for some reason issubclass doesn't always work.
+    # Only include items with api_info, this prevents the baseclass from being included
+    if not hasattr(cls, 'api_info'):
+        return False
+
+    # check up the mro chain for inheritence.
     for mro in inspect.getmro(cls):
         if mro.__module__ == remote.Service.__module__ and mro.__name__ == remote.Service.__name__:
             return True

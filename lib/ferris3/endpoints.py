@@ -4,6 +4,29 @@ from protorpc import messages
 import endpoints
 from .anodi import annotated
 import inspect
+from . import apis
+import re
+
+def underscore(string):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+
+def auto_class(cls=None, api=None, **kwargs):
+    def auto_class_decr(cls):
+        if not 'resource_name' in kwargs:
+            name = underscore(cls.__name__).replace('_api', '')
+            kwargs['resource_name'] = name
+
+        if not 'path' in kwargs:
+            kwargs['path'] = kwargs['resource_name']
+
+        ep_api = apis.get(api)
+        return ep_api.api_class(**kwargs)(cls)
+
+    if cls:
+        return auto_class_decr(cls)
+    return auto_class_decr
 
 
 def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='GET'):
