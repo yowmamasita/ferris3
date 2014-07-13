@@ -13,6 +13,7 @@ from ferris3.utils.messages import list_message
 
 
 def list_impl(ListMessage, query):
+    return ferris3.serialize_list(ListMessage, query)
     return ApiChain(query) \
         .messages.serialize_list(ListMessage) \
         .value()

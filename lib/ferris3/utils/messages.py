@@ -27,12 +27,3 @@ def serialize_list(ListMessageType, entities):
     message.next_page_token = next_page_token
 
     return message
-
-
-def list_message(message_type):
-    name = message_type.__name__ + 'List'
-    fields = {
-        'items': messages.MessageField(message_type, 1, repeated=True),
-        'next_page_token': messages.StringField(2)
-    }
-    return type(name, (messages.Message,), fields)
