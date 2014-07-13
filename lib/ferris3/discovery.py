@@ -9,7 +9,7 @@ app_directory = os.path.join(base_directory, 'app')
 
 
 def discover_api_services():
-    api_module_files = discover_files(lambda x: x.endswith('_api.py'))
+    api_module_files = discover_files(lambda x: x.endswith('api.py'))
     modules = load_modules_from_files(api_module_files)
     apis = find_api_classes(modules)
     return [x[1] for x in apis]
@@ -33,7 +33,7 @@ def load_modules_from_files(files):
         module_path, ext = os.path.splitext(relative_path)
         # app/thing/thing_api -> app.thing.thing_api
         import_path = '.'.join(module_path.split(os.sep))
-        
+
         module = importlib.import_module(import_path)
         modules.append(module)
     return modules

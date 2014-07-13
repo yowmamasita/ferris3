@@ -32,6 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # anodi
+from collections import OrderedDict
 import inspect
 empty = object()
 
@@ -112,7 +113,7 @@ def annotated (func=None, returns=empty):
     """
 
     def annotate (func):
-        func.__annotations__ = getattr(func, '__annotations__', {})
+        func.__annotations__ = getattr(func, '__annotations__', OrderedDict())
 
         if not returns == empty:
             func.__annotations__['return'] = returns

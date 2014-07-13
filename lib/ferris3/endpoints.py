@@ -87,6 +87,8 @@ def annotations_to_resource_container(annotations, defaults, RequestMessage):
 
             if type == str:
                 args[name] = messages.StringField(n, required=required)
+            if type == int:
+                args[name] = messages.IntegerField(n, required=required)
             #TODO: more types, required or not.
 
     if args:
