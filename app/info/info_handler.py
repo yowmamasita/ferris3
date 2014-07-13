@@ -1,10 +1,12 @@
 import webapp2
+from ferris3 import template
 
 
 class InfoHandler(webapp2.RequestHandler):
 
     def get(self):
-        self.response.write("Hi")
+        output = template.render("app/info/info.html")
+        self.response.write(output)
         return self.response
 
 
