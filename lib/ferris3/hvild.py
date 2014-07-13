@@ -11,6 +11,7 @@ from ferris3.utils.messages import list_message
 # Bare-bones, can be re-used in other methods and such.
 #
 
+
 def list_impl(ListMessage, query):
     return ApiChain(query) \
         .messages.serialize_list(ListMessage) \
@@ -66,6 +67,7 @@ def insert_impl(Model, Message, request):
 # Full method wrappers.
 # Can be used as endpoint methods directly.
 #
+
 
 def list(Model, Message=None, ListMessage=None, query=None, name='list'):
     if not Message:

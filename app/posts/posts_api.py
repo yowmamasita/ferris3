@@ -1,8 +1,8 @@
 from google.appengine.ext import ndb
-from ferris3 import hvild, auto_class, Service
+from ferris3 import hvild, auto_class, Service, Model
 
 
-class Post(ndb.Model):
+class Post(Model):
     title = ndb.StringProperty()
     content = ndb.TextProperty()
 
