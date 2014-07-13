@@ -1,10 +1,4 @@
-from __future__ import absolute_import
-import protopigeon
-from .endpoints import auto_method
-from .api_chain import ApiChain
-from endpoints import NotFoundException
-from protorpc import message_types
-from ferris3.utils.messages import list_message
+import ferris3
 
 #
 # Method implementations.
@@ -13,30 +7,29 @@ from ferris3.utils.messages import list_message
 
 
 def list_impl(ListMessage, query):
-    return ferris3.serialize_list(ListMessage, query)
-    return ApiChain(query) \
+    return ferris3.ApiChain(query) \
         .messages.serialize_list(ListMessage) \
         .value()
 
 
 def paginated_list_impl(ListMessage, query, limit, page_token):
-    return ApiChain(query) \
+    return ferris3.ApiChain(query) \
         .ndb.paginate(limit=limit, page_token=page_token) \
         .messages.serialize_list(ListMessage) \
         .value()
 
 
 def get_impl(Model, Message, item_key):
-    return ApiChain(item_key) \
+    return ferris3.ApiChain(item_key) \
         .ndb.get() \
-        .raise_if(None, NotFoundException()) \
+        .raise_if(None, ferris3.NotFoundException()) \
         .ndb.check_kind(Model) \
         .messages.serialize(Message) \
         .value()
 
 
 def delete_impl(Model, item_key):
-    return ApiChain(item_key) \
+    return ferris3.ApiChain(item_key) \
         .ndb.key() \
         .ndb.check_kind(Model) \
         .ndb.delete() \
@@ -44,13 +37,13 @@ def delete_impl(Model, item_key):
 
 
 def update_impl(Model, Message, item_key, request):
-    item = ApiChain(item_key) \
+    item = ferris3.ApiChain(item_key) \
         .ndb.get() \
-        .raise_if(None, NotFoundException()) \
+        .raise_if(None, ferris3.NotFoundException()) \
         .ndb.check_kind(Model) \
         .value()
 
-    return ApiChain(request) \
+    return ferris3.ApiChain(request) \
         .messages.deserialize(item) \
         .ndb.put() \
         .messages.serialize(Message) \
@@ -58,7 +51,7 @@ def update_impl(Model, Message, item_key, request):
 
 
 def insert_impl(Model, Message, request):
-    return ApiChain(request) \
+    return ferris3.ApiChain(request) \
         .messages.deserialize(Model) \
         .ndb.put() \
         .messages.serialize(Message) \
@@ -72,10 +65,10 @@ def insert_impl(Model, Message, request):
 
 def list(Model, Message=None, ListMessage=None, query=None, name='list'):
     if not Message:
-        Message = protopigeon.model_message(Model)
+        Message = ferris3.model_message(Model)
 
     if not ListMessage:
-        ListMessage = list_message(Message)
+        ListMessage = ferris3.list_message(Message)
 
     if not query:
         query = Model.query()
@@ -83,7 +76,7 @@ def list(Model, Message=None, ListMessage=None, query=None, name='list'):
     if callable(query):
         query = query()
 
-    @auto_method(returns=ListMessage, name=name)
+    @ferris3.auto_method(returns=ListMessage, name=name)
     def inner(self, request):
         return list_impl(ListMessage, query)
 
@@ -92,10 +85,10 @@ def list(Model, Message=None, ListMessage=None, query=None, name='list'):
 
 def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, name='list'):
     if not Message:
-        Message = protopigeon.model_message(Model)
+        Message = ferris3.model_message(Model)
 
     if not ListMessage:
-        ListMessage = list_message(Message)
+        ListMessage = ferris3.list_message(Message)
 
     if not query:
         query = Model.query()
@@ -103,7 +96,7 @@ def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, 
     if callable(query):
         query = query()
 
-    @auto_method(returns=ListMessage, name=name)
+    @ferris3.auto_method(returns=ListMessage, name=name)
     def inner(self, request, page_token=(str, '')):
         return paginated_list_impl(ListMessage, query, limit, page_token)
 
@@ -112,9 +105,9 @@ def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, 
 
 def get(Model, Message=None, name='get'):
     if not Message:
-        Message = protopigeon.model_message(Model)
+        Message = ferris3.model_message(Model)
 
-    @auto_method(returns=Message, name=name)
+    @ferris3.auto_method(returns=Message, name=name)
     def inner(self, request, item_key=(str,)):
         return get_impl(Model, Message, item_key)
 
@@ -123,7 +116,7 @@ def get(Model, Message=None, name='get'):
 
 def delete(Model, name='delete'):
 
-    @auto_method(name=name, http_method='DELETE')
+    @ferris3.auto_method(name=name, http_method='DELETE')
     def inner(self, request, item_key=(str,)):
         delete_impl(Model, item_key)
         return None
@@ -133,9 +126,9 @@ def delete(Model, name='delete'):
 
 def insert(Model, Message=None, name='insert'):
     if not Message:
-        Message = protopigeon.model_message(Model)
+        Message = ferris3.model_message(Model)
 
-    @auto_method(returns=Message, name=name, http_method='POST')
+    @ferris3.auto_method(returns=Message, name=name, http_method='POST')
     def inner(self, request=(Message,)):
         return insert_impl(Model, Message, request)
 
@@ -144,9 +137,9 @@ def insert(Model, Message=None, name='insert'):
 
 def update(Model, Message=None, name='update'):
     if not Message:
-        Message = protopigeon.model_message(Model)
+        Message = ferris3.model_message(Model)
 
-    @auto_method(returns=Message, name=name, http_method='POST')
+    @ferris3.auto_method(returns=Message, name=name, http_method='POST')
     def inner(self, request=(Message,), item_key=(str,)):
         return update_impl(Model, Message, item_key, request)
 

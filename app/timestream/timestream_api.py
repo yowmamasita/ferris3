@@ -8,7 +8,7 @@ TimeEntryListMessage = f3.list_message(TimeEntryMessage)
 
 
 @f3.auto_class
-class TimestreamApi(Service):
+class TimestreamApi(f3.Service):
 
     @f3.auto_method(returns=TimeEntryListMessage)
     def list(self, request, year=(int,), month=(int,), day=(int,)):
