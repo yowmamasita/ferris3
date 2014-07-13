@@ -15,6 +15,13 @@ def discover_api_services():
     return [x[1] for x in apis]
 
 
+def discover_webapp2_routes():
+    handler_module_files = discover_files(lambda x: x.endswith('handler.py'))
+    modules = load_modules_from_files(handler_module_files)
+    routes = find_webapp2_routes(modules)
+    return routes
+
+
 def discover_files(predicate):
     results = []
     for root_path, _, files in os.walk(app_directory):
@@ -45,6 +52,14 @@ def find_api_classes(modules):
         apis = inspect.getmembers(module, lambda x: inspect.isclass(x) and is_remote_service(x))
         classes.extend(apis)
     return classes
+
+
+def find_webapp2_routes(modules):
+    routes = []
+    for module in modules:
+        if hasattr(module, 'webapp2_routes'):
+            routes.extend(module.webapp2_routes)
+    return routes
 
 
 def is_remote_service(cls):
