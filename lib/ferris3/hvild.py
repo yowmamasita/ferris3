@@ -7,20 +7,20 @@ import ferris3
 
 
 def list_impl(ListMessage, query):
-    return ferris3.ApiChain(query) \
+    return ferris3.ToolChain(query) \
         .messages.serialize_list(ListMessage) \
         .value()
 
 
 def paginated_list_impl(ListMessage, query, limit, page_token):
-    return ferris3.ApiChain(query) \
+    return ferris3.ToolChain(query) \
         .ndb.paginate(limit=limit, page_token=page_token) \
         .messages.serialize_list(ListMessage) \
         .value()
 
 
 def get_impl(Model, Message, item_key):
-    return ferris3.ApiChain(item_key) \
+    return ferris3.ToolChain(item_key) \
         .ndb.get() \
         .raise_if(None, ferris3.NotFoundException()) \
         .ndb.check_kind(Model) \
@@ -29,7 +29,7 @@ def get_impl(Model, Message, item_key):
 
 
 def delete_impl(Model, item_key):
-    return ferris3.ApiChain(item_key) \
+    return ferris3.ToolChain(item_key) \
         .ndb.key() \
         .ndb.check_kind(Model) \
         .ndb.delete() \
@@ -37,13 +37,13 @@ def delete_impl(Model, item_key):
 
 
 def update_impl(Model, Message, item_key, request):
-    item = ferris3.ApiChain(item_key) \
+    item = ferris3.ToolChain(item_key) \
         .ndb.get() \
         .raise_if(None, ferris3.NotFoundException()) \
         .ndb.check_kind(Model) \
         .value()
 
-    return ferris3.ApiChain(request) \
+    return ferris3.ToolChain(request) \
         .messages.deserialize(item) \
         .ndb.put() \
         .messages.serialize(Message) \
@@ -51,7 +51,7 @@ def update_impl(Model, Message, item_key, request):
 
 
 def insert_impl(Model, Message, request):
-    return ferris3.ApiChain(request) \
+    return ferris3.ToolChain(request) \
         .messages.deserialize(Model) \
         .ndb.put() \
         .messages.serialize(Message) \

@@ -18,7 +18,7 @@ class TimestreamApi(f3.Service):
     def _list(self, date):
         query = TimeEntry.list_stream(f3.get_current_user(), date)
 
-        return f3.ApiChain(query) \
+        return f3.ToolChain(query) \
             .messages.serialize_list(TimeEntryListMessage) \
             .value()
 
