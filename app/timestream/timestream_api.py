@@ -24,12 +24,13 @@ class TimestreamApi(f3.Service):
 
     @f3.auto_method(returns=TimeEntryListMessage, http_method='POST')
     def update(self, request=(TimeEntryListMessage,), year=(int,), month=(int,), day=(int,)):
+
         user = f3.get_current_user()
         date = datetime.date(year=int(year), month=int(month), day=int(day))
         stream_key = TimeEntry.make_stream_key(user, date)
 
         items = [
-            f3.deserialize(item, TimeEntry(parent=stream_key))
+            f3.deserialize(TimeEntry(parent=stream_key), item)
             for item
             in request.items]
 

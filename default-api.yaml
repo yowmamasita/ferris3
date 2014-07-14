@@ -7,3 +7,4 @@ scopes:
 - USERINFO
 allowed_client_ids:
 - API_EXPLORER_CLIENT_ID
+- 462711127220-1mr3uha1ukgicv4s0ebvo26bulkpb4k1.apps.googleusercontent.com
