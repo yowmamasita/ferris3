@@ -7,6 +7,7 @@ import inspect
 from . import apis
 import re
 
+
 def underscore(string):
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
@@ -14,11 +15,11 @@ def underscore(string):
 
 def auto_class(cls=None, api=None, **kwargs):
     def auto_class_decr(cls):
-        if not 'resource_name' in kwargs:
+        if 'resource_name' not in kwargs:
             name = underscore(cls.__name__).replace('_api', '')
             kwargs['resource_name'] = name
 
-        if not 'path' in kwargs:
+        if 'path' not in kwargs:
             kwargs['path'] = kwargs['resource_name']
 
         ep_api = apis.get(api)
@@ -89,7 +90,7 @@ def annotations_to_resource_container(annotations, defaults, RequestMessage):
                 args[name] = messages.StringField(n, required=required)
             if type == int:
                 args[name] = messages.IntegerField(n, required=required)
-            #TODO: more types, required or not.
+            #TODO: more types
 
     if args:
         return endpoints.ResourceContainer(RequestMessage, **args), args.keys()

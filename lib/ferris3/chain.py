@@ -34,6 +34,7 @@ def raise_if(value_or_func, ex, data):
 class mixedmethod(object):
     def __init__(self, func):
         self.func = func
+
     def __get__(self, instance, cls):
         return functools.partial(self.func, instance, cls)
 
@@ -58,7 +59,7 @@ class Chain(object):
         return self
 
     value = get_value
-    
+
     @mixedmethod
     def add_chain_function(self, cls, func, name=None):
         if not name:

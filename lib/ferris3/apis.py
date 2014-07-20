@@ -8,6 +8,7 @@ _default_api_name = None
 
 base_directory = os.getcwd()
 
+
 def add(config_file, default=False):
     global _apis, _default_api_name
 
@@ -52,6 +53,7 @@ def load_config_file(config_file):
     }.get(auth_level)
 
     return config
+
 
 def recursive_replace(container, old, new):
     if isinstance(container, dict):
