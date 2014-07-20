@@ -7,5 +7,5 @@ from .tool_chain import ToolChain
 from .apis import default as default_api
 from .model import Model, BasicModel, Behavior
 from protopigeon import model_message, list_message
-from .utils.messages import serialize, deserialize, serialize_list
+from . import ndb, messages
 from endpoints import get_current_user, NotFoundException

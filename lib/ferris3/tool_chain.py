@@ -1,5 +1,5 @@
 from .chain import Chain
-from .utils import ndb, messages
+from . import ndb, messages
 
 
 class ToolChain(Chain):

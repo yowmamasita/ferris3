@@ -1,6 +1,4 @@
 import protopigeon
-from protorpc import messages
-from google.appengine.ext import ndb
 
 
 def serialize(MessageType, entity):

@@ -45,9 +45,9 @@ PaginationResults = namedtuple('PaginationResults', ['items', 'next_page_token']
 def paginate(query, limit=50, page_token=None):
     if page_token and not isinstance(page_token, Cursor):
         page_token = Cursor(urlsafe=page_token)
-    
+
     # Force all falsy values into None
-    if not page_token: 
+    if not page_token:
         page_token = None
 
     data, next_cursor, more = query.fetch_page(limit, start_cursor=page_token)
