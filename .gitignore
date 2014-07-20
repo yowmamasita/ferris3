@@ -1,2 +1,4 @@
 *.pyc
 .appengine_data
+*.egg-info
+dist
