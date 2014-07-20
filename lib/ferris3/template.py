@@ -18,6 +18,7 @@ def environment():
     _environment = jinja2.Environment(**jinja2_env_kwargs)
     return _environment
 
+
 def render(name, context=None):
     env = environment()
     template = env.get_or_select_template(name)
