@@ -4,7 +4,7 @@ from protorpc import messages
 import endpoints
 from .anodi import annotated
 import inspect
-from . import apis
+from . import endpoints_apis
 import re
 
 
@@ -22,7 +22,7 @@ def auto_class(cls=None, api=None, **kwargs):
         if 'path' not in kwargs:
             kwargs['path'] = kwargs['resource_name']
 
-        ep_api = apis.get(api)
+        ep_api = endpoints_apis.get(api)
         return ep_api.api_class(**kwargs)(cls)
 
     if cls:
