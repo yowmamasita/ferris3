@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '3.0.0-alpha'
+VERSION = '3.0.0-alpha1'
 
 setup(
     name="Ferris",
@@ -17,7 +17,7 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
     ],
-    packages=['protopigeon'],
+    packages=['ferris3'],
     install_requires=[
     ],
 )
