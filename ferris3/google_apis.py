@@ -67,7 +67,7 @@ def retries(f):
             client.files().update(fileId="123", data={"name": "Test"}).execute()
 
     """
-    from . import retries as ferris_retries
+    from .retries import retries as ferris_retries
 
     @functools.wraps(f)
     def inner(*args, **kwargs):
