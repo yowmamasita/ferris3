@@ -83,7 +83,7 @@ def list(Model, Message=None, ListMessage=None, query=None, name='list'):
     return inner
 
 
-def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, name='list'):
+def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, name='paginated_list'):
     if not Message:
         Message = ferris3.model_message(Model)
 
