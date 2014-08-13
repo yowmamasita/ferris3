@@ -163,6 +163,8 @@ def key(s):
 
 
 def get(item):
+    if isinstance(item, ndb.Query):
+        return item.get()
     return key(item).get()
 
 
