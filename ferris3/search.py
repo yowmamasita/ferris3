@@ -253,9 +253,9 @@ def create_sort_options(fields, default_values=None):
 
         if field.startswith('-'):
             field = field[1:]
-            direction_exp = search_api.SortExpression.ASCENDING
-        else:
             direction_exp = search_api.SortExpression.DESCENDING
+        else:
+            direction_exp = search_api.SortExpression.ASCENDING
 
         default_value = default_values.get(field, '')
 

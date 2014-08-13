@@ -19,13 +19,13 @@ def paginated_list_impl(ListMessage, query, limit, page_token):
         .value()
 
 
-def searchable_list_impl(ListMessage, index, query, limit, page_token):
+def searchable_list_impl(ListMessage, index, query, limit, sort, page_token):
     def check_for_search_errors(data):
         if data.error:
             raise ferris3.BadRequestException("Search error: %s" % data.error)
 
     return ferris3.ToolChain(query) \
-        .search.search(index, sort='title', limit=limit, page_token=page_token) \
+        .search.search(index, sort=sort, limit=limit, page_token=page_token) \
         .tap(check_for_search_errors) \
         .search.to_entities() \
         .messages.serialize_list(ListMessage) \
@@ -127,8 +127,8 @@ def searchable_list(Model=None, Message=None, ListMessage=None, limit=50, index=
         index = ferris3.search.index_for(Model)
 
     @ferris3.auto_method(returns=ListMessage, name=name)
-    def inner(self, request, query=(str, ''), page_token=(str, '')):
-        return searchable_list_impl(ListMessage, index, query, limit, page_token)
+    def inner(self, request, query=(str, ''), sort=(str, None), page_token=(str, '')):
+        return searchable_list_impl(ListMessage, index, query, limit, sort, page_token)
 
     return inner
 
