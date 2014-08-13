@@ -47,12 +47,6 @@ class Searchable(Behavior):
     """
     Automatically indexes models during after_put into the App Engine Text Search API.
     """
-    def _get_index(self):
-        if hasattr(self.Model.Meta, 'search_index'):
-            return self.Model.Meta.search_index
-        else:
-            return 'searchable:%s' % self.Model._get_kind()
-
     def after_put(self, instance):
         only = self.Model.Meta.search_fields if hasattr(self.Model.Meta, 'search_fields') else None
         exclude = self.Model.Meta.search_exclude if hasattr(self.Model.Meta, 'search_exclude') else None
@@ -61,7 +55,7 @@ class Searchable(Behavior):
         callback = self.Model.Meta.search_callback if hasattr(self.Model.Meta, 'search_callback') else None
         index_entity(
             instance=instance,
-            index=self._get_index(),
+            index=index_for(self.Model),
             only=only,
             exclude=exclude,
             indexer=indexer,
@@ -69,7 +63,14 @@ class Searchable(Behavior):
             callback=callback)
 
     def before_delete(self, key):
-        unindex_entity(key, self._get_index())
+        unindex_entity(key, index_for(self.Model))
+
+
+def index_for(Model):
+    if hasattr(Model.Meta, 'search_index'):
+        return Model.Meta.search_index
+    else:
+        return 'searchable:%s' % Model._get_kind()
 
 
 def default_entity_indexer(instance, properties, extra_converters=None):
