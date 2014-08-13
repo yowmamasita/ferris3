@@ -175,7 +175,7 @@ def unindex_entity(instance_or_key, index=None):
         index.delete(str(instance_or_key.urlsafe()))
 
 
-def transform_to_entities(results):
+def documents_to_entities(results):
     """
     Transform a list of search results into ndb.Model entities by using the document id
     as the urlsafe form of the key.
@@ -185,12 +185,9 @@ def transform_to_entities(results):
     return results
 
 
-def search(index, query, limit=None, cursor=None, options=None, sort_field=None, sort_direction='asc', sort_default_value=None, per_document_cursor=False, transformer=transform_to_entities):
+def search(index, query, limit=None, cursor=None, options=None, sort_field=None, sort_direction='asc', sort_default_value=None, per_document_cursor=False):
     """
-    Searches an index with the given query.
-
-    By default, this will transform the results into a list of datastore
-    entities. This behavior can be override by providing a function to the transformer argument.
+    Searches an index with the given query and returns a list of search documents or document ids.
 
     Additionally, this only gets document ids by default. To override this, pass in an options parameter that
     sets ids_only to False.
@@ -229,7 +226,7 @@ def search(index, query, limit=None, cursor=None, options=None, sort_field=None,
         query = search_api.Query(query_string=query, options=search_api.QueryOptions(**options_params))
         index_results = index.search(query)
 
-        results = transformer(index_results)
+        results = list(index_results)
 
         current_cursor = current_cursor.web_safe_string if current_cursor else None
         next_cursor = index_results.cursor.web_safe_string if index_results.cursor and results else None
