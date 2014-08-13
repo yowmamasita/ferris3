@@ -1,5 +1,6 @@
 import logging
 import inspect
+from collections import namedtuple
 from google.appengine.api import search as search_api
 from google.appengine.ext import ndb
 from .ndb import Behavior
@@ -175,28 +176,29 @@ def unindex_entity(instance_or_key, index=None):
         index.delete(str(instance_or_key.urlsafe()))
 
 
-def documents_to_entities(results):
+def to_entities(results):
     """
     Transform a list of search results into ndb.Model entities by using the document id
     as the urlsafe form of the key.
     """
-    results = ndb.get_multi([ndb.Key(urlsafe=x.doc_id) for x in results])
-    results = [x for x in results if x]
-    return results
+    if isinstance(results, SearchResults):
+        items = [x for x in ndb.get_multi([ndb.Key(urlsafe=y.doc_id) for y in results.items]) if x]
+        return SearchResults(items=items, error=results.error, next_page_token=results.next_page_token)
+    else:
+        return[x for x in ndb.get_multi([ndb.Key(urlsafe=y.doc_id) for y in results]) if x]
 
 
-def search(index, query, limit=None, cursor=None, options=None, sort_field=None, sort_direction='asc', sort_default_value=None, per_document_cursor=False):
+SearchResults = namedtuple('SearchResults', ['items', 'error', 'next_page_token'])
+
+
+def search(index, query, sort=None, sort_default_values=None, limit=None, page_token=None, ids_only=True, options=None, per_document_cursor=False):
     """
-    Searches an index with the given query and returns a list of search documents or document ids.
+    Searches an index with the given query and returns a list of document ids or search documents.
 
-    Additionally, this only gets document ids by default. To override this, pass in an options parameter that
-    sets ids_only to False.
+    By default, this only returns document ids as it's most common to get the entity or database entries associated with the document.
+    To get the full search document pass :param:ids_only = True.
 
-    example of disabling both of these default behaviors:
-
-        search(index='test_index', query='test', options={'ids_only': False}, transformer=list)
-
-    This function returns a tuple: error, results, cursor, next_cursor.
+    This function returns a tuple: items, error, next_page_token
     """
 
     options = options if options else {}
@@ -207,15 +209,15 @@ def search(index, query, limit=None, cursor=None, options=None, sort_field=None,
 
     try:
         index = search_api.Index(name=index)
-        current_cursor = search_api.Cursor(web_safe_string=cursor) if cursor else search_api.Cursor(per_result=per_document_cursor)
+        current_cursor = search_api.Cursor(web_safe_string=page_token) if page_token else search_api.Cursor(per_result=per_document_cursor)
 
         options_params = dict(
             limit=limit,
-            ids_only=True,
+            ids_only=ids_only,
             cursor=current_cursor)
 
-        if sort_field:
-            options_params['sort_options'] = create_sort_options(sort_field, sort_direction, sort_default_value)
+        if sort:
+            options_params['sort_options'] = create_sort_options(sort, sort_default_values)
 
         options_params.update(options)
 
@@ -234,22 +236,39 @@ def search(index, query, limit=None, cursor=None, options=None, sort_field=None,
     except (search_api.Error, search_api.query_parser.QueryException) as e:
         error = str(e)
 
-    return error, results, current_cursor, next_cursor
+    return SearchResults(items=results, error=error, next_page_token=next_cursor)
 
 
-def create_sort_options(field, direction='asc', default_value=None):
-    direction_exp = search_api.SortExpression.ASCENDING if direction == 'asc' else search_api.SortExpression.DESCENDING
+def create_sort_options(fields, default_values=None):
+    default_values = default_values or {}
+    expressions = []
 
-    if inspect.isfunction(default_value):
-        default_value = default_value(field, direction)
+    fields = fields if isinstance(fields, (list, tuple)) else [fields]
 
-    return search_api.SortOptions(expressions=[
-        search_api.SortExpression(
-            expression=field,
-            direction=direction_exp,
-            default_value=default_value or ''
-        )
-    ])
+    for field in fields:
+        if isinstance(field, search_api.SortExpression):
+            expressions.append(field)
+            continue
+
+        if field.startswith('-'):
+            field = field[1:]
+            direction_exp = search_api.SortExpression.ASCENDING
+        else:
+            direction_exp = search_api.SortExpression.DESCENDING
+
+        default_value = default_values.get(field, '')
+
+        if inspect.isfunction(default_value):
+            default_value = default_value(field, direction_exp)
+
+        expressions.append(
+            search_api.SortExpression(
+                expression=field,
+                direction=direction_exp,
+                default_value=default_value
+            ))
+
+    return search_api.SortOptions(expressions=expressions)
 
 
 def join_query(filters, operator='AND', parenthesis=False):

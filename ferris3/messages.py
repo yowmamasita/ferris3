@@ -11,8 +11,9 @@ def deserialize(Model, message):
 
 def serialize_list(ListMessageType, entities):
     from .ndb import PaginationResults
+    from .search import SearchResults
 
-    if isinstance(entities, PaginationResults):
+    if isinstance(entities, (PaginationResults, SearchResults)):
         next_page_token = entities.next_page_token
         entities = entities.items
     else:

@@ -97,7 +97,7 @@ class Chain(object):
             cls.add_chain_function(func)
 
     @mixedmethod
-    def add_chain_module(self, cls, module, module_name=None):
+    def add_chain_module(self, cls, module, module_name=None, only=None, exclude=None):
         if not module_name:
             module_name = module.__name__.split('.').pop()
 
@@ -107,6 +107,10 @@ class Chain(object):
 
             cm = ChainModule(self)
             for fname, func in inspect.getmembers(module, callable):
+                if only and fname not in only:
+                    continue
+                if exclude and fname in exclude:
+                    continue
                 cm.add_chain_function(func, fname)
 
             self._modules[module_name] = cm
