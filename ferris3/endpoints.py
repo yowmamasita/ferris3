@@ -16,7 +16,7 @@ def underscore(string):
 def auto_class(cls=None, api=None, **kwargs):
     def auto_class_decr(cls):
         if 'resource_name' not in kwargs:
-            name = underscore(cls.__name__).replace('_api', '')
+            name = underscore(cls.__name__).replace('_api', '').replace('_service', '')
             kwargs['resource_name'] = name
 
         if 'path' not in kwargs:
