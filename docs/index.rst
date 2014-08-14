@@ -3,8 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Ferris3's documentation!
-===================================
+Welcome to Ferris 3
+===================
+
+Welcome! There are multiple sections of documentation. For some background on Ferris check out :doc:`introduction`. Most people being with :doc:`getting_starting` and then move on to the :doc:`tutorial`. Once you're comfortable with those take a deep dive into the :doc:`users_guide` and check out some :doc:`common_patterns`.
+
 
 Contents:
 
@@ -13,8 +16,8 @@ Contents:
 
 
 
-Indices and tables
-==================
+Can't find something?
+=====================
 
 * :ref:`genindex`
 * :ref:`modindex`
