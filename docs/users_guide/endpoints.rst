@@ -3,14 +3,19 @@ Endpoints
 
 Ferris provides some utilities on top of Google Cloud Endpoints to make it easier to define an expose endpoints.
 
+An endpint is comprised of various parts:
 
-.. module:: ferris3.endpoints_apis
+ 1. **Endpoint** is the top-level container. It contains the definition of the API's properties including the name, authentication, and access control. An application can have multiple endpoints.
+ 2. **API Classes**
 
 
-Defining APIs
--------------
+.. module:: ferris3.endpoints
 
-When you start a new ferris project a default API is created for you and made available to clients and your application. However, you're not limited to just one API. APIs can be defined via yaml files stored in the ``app`` directory. Here's an annotated sample::
+
+Defining Endpoint APIs
+----------------------
+
+When you start a new ferris project a default endpoint is created for you and made available to clients and your application. However, you're not limited to just one endpoint. Endpoints can be defined via yaml files stored in the ``app`` directory. Here's an annotated sample::
 
     
     # Friendly name. Shows up in the Google API Explorer.
@@ -33,15 +38,15 @@ When you start a new ferris project a default API is created for you and made av
     - 462711127220-1mr3uha1ukgicv4s0ebvo26bulkpb4k1.apps.googleusercontent.com
 
 
-Once you've defined your API you need to instruct ferris to load it and make it available. You'll need to modify ``main.py`` and add:
+Once you've defined your endpoint you need to instruct ferris to load it and make it available. You'll need to modify ``main.py`` and add:
     
-    endpoints_apis.add('app/my-new-api.yaml')
+    endpoints.add('app/my-new-api.yaml')
 
 
-Using APIs
-----------
+Creating API Classes
+--------------------
 
-The easiest way to associate a service class with an API is via :func:`auto_class`::
+The easiest way to associate a API class with an endpoint is via :func:`auto_class`::
 
     import ferris3
 
@@ -57,15 +62,21 @@ The easiest way to associate a service class with an API is via :func:`auto_clas
     class ImagesApi(ferris3.Service):
         ...
 
-If you need more control, the APIs loaded by Ferris are turned in to normal Google Cloud Endpoints API classes. This means you can follow the same patterns described in Google's documentation on `implementing a multi-class api <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`::
+If you need more control, the endpoints loaded by Ferris are turned in to normal Google Cloud Endpoints API classes. This means you can follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`::
 
     import ferris3
     import endpoints
 
-    api = ferris3.endpoints_apis.default()
+    endpoint = ferris3.endpoints.default()
 
-    @api.api_class(resource_name='posts')
+    @endpoint.api_class(resource_name='posts')
     class PostsApi(ferris3.Service):
         ...
 
-The default api is available via :func:`default` and you can get a particular api by name via :func:`get`.
+The default endpoint is available via :func:`default` and you can get a particular endpoint by name via :func:`get`.
+
+
+Exposing API Methods
+--------------------
+
+TODO
