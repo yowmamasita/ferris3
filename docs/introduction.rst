@@ -29,5 +29,33 @@ Convention, Configuration, and Structure
 Ferris is relatively opinionated about application structure, however, ferris is flexible and there's always a way to configure it to do something differently. Our manta is to optimize for the common case but not at the expense of other cases. It's also part of our philosophy that if you're using another web framework on App Engine you should be able to use parts of Ferris that you find useful (such as model behaviors and search helpers).
 
 
-Fractal Hierarchy
------------------
+Organization by feature, not function
+-------------------------------------
+
+Ferris applications are generally organized by feature which is in contrast to MVC frameworks that organize by structure. For example, a typical MVC application would have a structure like so::
+
+    controllers
+        - posts.py
+        - pages.py
+        - images.py
+    models
+        - post.py
+        - page.py
+        - image.py
+        - user.py
+
+Whereas in Ferris you would instead organize this application this way::
+
+    posts
+        - models.py
+        - posts_api.py
+    pages
+        - models.py
+        - pages_api.py
+    images
+        - models.py
+        - images_api.py
+    users
+        - models.py
+
+We believe this structure improved readability and makes it easier to maintain applications with large amounts of features.
