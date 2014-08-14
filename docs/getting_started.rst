@@ -1,6 +1,9 @@
 Getting Started
 ===============
 
+This section walks you trough setting up your environment and creating an empty Ferris project. For an introduction to what Ferris is and how it can help, see :doc:`introduction`.
+
+
 Installing pre-requisites
 -------------------------
 
