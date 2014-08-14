@@ -18,7 +18,7 @@ Contents:
    getting_started
    tutorial
    common_patterns
-   users_guide
+   users_guide/index.rst
 
 
 
