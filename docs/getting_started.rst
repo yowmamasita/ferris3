@@ -38,8 +38,8 @@ Yeoman will ask you a few questions (the defaults are usually fine) and generate
 
 Alternatively, if you do not wish to use Yeoman you can close the `Ferris Boilerplate <TODO>`_ repository.
 
-Running with the App Engine development server
-----------------------------------------------
+The App Engine Development Server
+---------------------------------
 
 Ferris uses the same App Engine development server as any other application. See Google's `documentation on using the development server <https://developers.google.com/appengine/docs/python/tools/devserver#Python_Running_the_development_web_server>`_.
 
@@ -48,3 +48,19 @@ Ferris uses the same App Engine development server as any other application. See
 
 .. warning::
     When using ``dev_appserver.py`` with default configuration it stores all data in the ``/tmp`` directory which is deleted upon reboot. We have created an `app-server <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap/src/master/app-server.sh>`_ script that stores the data alongside the application.
+
+
+The APIs Explorer
+-----------------
+
+By navigating to ``localhost:8080/_ah/api/explorer`` locally or ``your-app-id.appspot.com/_ah/api/explorer`` live you'll be able to browse and interact with the APIs explosed by your Ferris application. See Google's `documentation on testing APIs <https://developers.google.com/appengine/docs/python/endpoints/test_deploy>`_.
+
+
+.. note::
+    As mentioned above, your port may be different if using the App Engine Launcher.
+
+
+Deploying
+---------
+
+Ferris applications are deployed just like any other App Engine application. See Google's `documentation on deploying applications <https://developers.google.com/appengine/docs/python/gettingstartedpython27/uploading>`_.

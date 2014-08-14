@@ -14,6 +14,12 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   introduction
+   getting_started
+   tutorial
+   common_patterns
+   users_guide
+
 
 
 Can't find something?
