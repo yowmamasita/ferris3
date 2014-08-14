@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Ferris3'
-copyright = u'2014, Jon Wayne Parrott, Andrew Whelan, Brooks Parrish'
+copyright = u'2014, Jon Wayne Parrott, Andrew Whelan, Brooks Parrish, Cloud Sherpas'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
