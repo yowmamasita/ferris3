@@ -15,8 +15,10 @@ An endpint is comprised of various parts:
 Defining Endpoint APIs
 ----------------------
 
-When you start a new ferris project a default endpoint is created for you and made available to clients and your application. However, you're not limited to just one endpoint. Endpoints can be defined via yaml files stored in the ``app`` directory. Here's an annotated sample::
+When you start a new ferris project a default endpoint is created for you and made available to clients and your application. However, you're not limited to just one endpoint. Endpoints can be defined via yaml files stored in the ``app`` directory. Here's an annotated sample:
 
+
+.. code-block :: yaml
     
     # Friendly name. Shows up in the Google API Explorer.
     canonical_name: Ferris API
@@ -62,7 +64,7 @@ The easiest way to associate a API class with an endpoint is via :func:`auto_cla
     class ImagesApi(ferris3.Service):
         ...
 
-If you need more control, the endpoints loaded by Ferris are turned in to normal Google Cloud Endpoints API classes. This means you can follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`::
+If you need more control, the endpoints loaded by Ferris are turned in to normal Google Cloud Endpoints API classes. This means you can follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_::
 
     import ferris3
     import endpoints
