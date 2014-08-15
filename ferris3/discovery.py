@@ -11,7 +11,7 @@ app_directory = os.path.join(base_directory, 'app')
 def discover_api_services():
     api_module_files = discover_files(lambda x: x.endswith('service.py'))
     modules = load_modules_from_files(api_module_files)
-    apis = find_api_classes(modules)
+    apis = find_service_classes(modules)
     return [x[1] for x in apis]
 
 
@@ -46,7 +46,7 @@ def load_modules_from_files(files):
     return modules
 
 
-def find_api_classes(modules):
+def find_service_classes(modules):
     classes = []
     for module in modules:
         apis = inspect.getmembers(module, lambda x: inspect.isclass(x) and is_remote_service(x))

@@ -89,7 +89,7 @@ def underscore(string):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 
-def auto_class(cls=None, endpoint=None, **kwargs):
+def auto_service(cls=None, endpoint=None, **kwargs):
     def auto_class_decr(cls):
         if 'resource_name' not in kwargs:
             name = underscore(cls.__name__).replace('_api', '').replace('_service', '')
