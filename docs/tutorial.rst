@@ -9,47 +9,49 @@ Ferris 3 Tutorial
 A Simple “Posts” Service
 ------------------------
 
-Let’s start with something easy to illustrate just how magical Ferris 3 actually is: a Posts Service. This will also give us a chance to get accustomed to the new folder organization in Ferris.
+Let’s start with something easy to illustrate just how magical Ferris 3 actually is: a Posts Service.
 
-Ferris 3 implements something called “fractal hierarchy”. Unlike in Ferris 2, where all controllers and models were housed inside the overarching folders “controllers” and “models”, in this new paradigm controllers, models, handlers, and anything else relating to a specific service are all housed inside a folder named after that service.
+First we will create a “posts” folder inside of the “app” folder.
 
-For instance, since we are building a Posts service, we will create a “posts” folder inside of the “app” folder. Now since Jon still hasn’t automated this yet, you still have to go through the gratuitous process of creating an empty __init__.py file right inside your posts folder. Feel free to scowl and send angry messages to Jon about this. (editor’s note: when google allows us to use python 3, we’ll no longer have to do this).
+.. note::
+    For a refresher on how the new folder structure works, take a look at the :doc:`introduction` again. Also recall that any and every folder you create in your project will need an empty __init__.py file inside of it.
+    (editor’s note: when Google allows us to use Python 3, we’ll no longer have to do this).
 
-With that out of the way, create another file inside of the posts folder called “posts_api.py”. The convention here is to use “[Module Name]_api.py”. Inside this file we will define all the different methods we’d like our API to contain.
+Now we'll create the service file. The convention here is to use “[Service Name]_servcice.py”, or in this case "posts_service.py". Inside this file we will define all the different methods we’d like our Service to contain.
 
-Before we start making methods to interact with Posts, we’ll need a Post model. We can accomplish this in two ways:
+Before we start making methods to interact with Posts, however, we’ll need an actual Post model. We can accomplish this in two ways:
 
     1. Create a separate models.py file that contains the models we need.
-    2. Define the model inside our posts_api.py file
+    2. Define the model inside our service file.
 
-For simplicity’s sake and because our Posts model is relatively trivial, we’re going to go with option 2 (note how strongly different this is from the Ferris 2 recommendations). We’ll need to import the Model class and the ndb module using the following lines:
+For simplicity’s sake, and because our Posts model is relatively trivial, we’re going to go with option 2 (note how strongly different this is from the Ferris 2 recommendations). We’ll need to import the Model class and the ndb module using the following lines::
 
-from google.appengine.ext import ndb
-from ferris3 import Model
-
-An important thing to note here is that we are importing ndb from the appengine module, not the ferris3 module. There is an ndb package inside the ferris3 module, but it’s not the one we want.*
-
-*Basically, ferris’ module names match the modules they supplement. So ferris.ndb supplements google.appengine.ext, ferris.messages supplements protorpc.message, and ferris.endpoints supplements endpoints.
+    from google.appengine.ext import ndb
+    from ferris3 import Model
 
 
+.. warning::
+    An important thing to note here is that we are importing ndb from the appengine module, not the ferris3 module. There is an ndb package inside the ferris3 module, but it’s not the one we want.
+
+    Ferris’ module names match the modules they supplement. So ferris.ndb supplements google.appengine.ext, ferris.messages supplements protorpc.message, and ferris.endpoints supplements endpoints.
 
 
 Now lets add our simple Posts model::
 
     class Post(Model):
-    title = ndb.StringProperty()
-    content = ndb.TextProperty()
+        title = ndb.StringProperty()
+        content = ndb.TextProperty()
 
-And voila, we have a Model to perform some basic methods with. To get started on the service itself, we’ll first need to import a few more commands from Ferris 3. Augment your import statement to include “auto_class”, “Service”, and “hvild”, so it looks something like this::
+And voila, we have a model to perform some basic methods with. To get started on the service itself, we’ll first need to import a few more commands from Ferris 3. Augment your import statement to include “auto_service”, “Service”, and “hvild”, so it looks something like this::
 
-    from ferris3 import Model, Service, hvild, auto_class
+    from ferris3 import Model, Service, hvild, auto_service
 
-“auto_class” is a method decorator that we will always use when defining our API service. “Service”e is what our class will extnd. Our class definition will look like this::
+"auto_service" is a method decorator that we will always use when defining our API service. “Service” is what our class will extnd. Our class definition will look like this::
 
     @auto_class
     class PostsApi(Service):
 
-Now we get to “hvild”. hvild is some Jon magic that will make your life incredibly easy when it comes to coding up a quick, simple API service. It functions very similarly to the scaffold module from Ferris 2. We can very quickly give the posts service some basic functionality with the following lines::
+Now we get to “hvild”. hvild is where Ferris 3 truly shines, as it will allow you to generate API methods like insert, get, update, delete, etc. quickly and painlessly. Those familiar with Ferris 2 will find it to be very similar to "scaffold". Lets give our posts service some basic functionality with the following lines::
 
     list = hvild.list(Post)
     get = hvild.get(Post)
@@ -58,20 +60,24 @@ Now we get to “hvild”. hvild is some Jon magic that will make your life incr
     update = hvild.update(Post)
 
 That’s it, just set your methods equal to their hvild counterparts and pass in the model that the methods manipulate (in this case “Post”).
-There is one more hvild method which will take just one ounce more effort to use, and that is paginated_list. The only difference is that along with the model, you must also pass in a “limit” parameter which will be the number of instances that appear on each page of the paginated list. In our case, let’s include 3 posts per page by adding this next line::
+There are two more hvild method which will take just an ounce more effort to use, and those are paginated_list and search. The only difference is that along with the model, you must also pass in a “limit” parameter which will be the number of instances that appear on each page of the results. In our case, let’s include 3 posts per page by adding these lines::
 
     paginated_list = hvild.list(Post, limit=3)
-
-Now let’s test these methods! First we’re gonna need some posts in the datastore, and we can put them there in one of two ways. We can either use the interactive console (located at localhost:8000) just like we might have with Ferris 2, or we can use the insert method that we just had hvild build for us in the APIs Explorer. Either is fine, but we might as well use the Explorer just to get used to navigating through it.
-
+    search = hvild.search(Post, limit=3)
 
 
-.. reminder::
+Using the Google APIs Explorer
+------------------------------
+
+Now let’s test these methods! First we’re gonna need some posts in the datastore. We can put them there in one of two ways: We can either use the interactive console (located at localhost:8000) just like we might have with Ferris 2, or we can use the insert method in the APIs Explorer that we just had hvild build for us. Either is fine, but we might as well use the Explorer just to get used to navigating through it.
+
+
+.. note::
 
     To get to the Explorer, navigate to
     localhost:8080/_ah/api/explorer
 
-From here, if you’ve done everything right, you should see “ferris API” in your list of APIs (and nothing else!). If it doesn’t show up, take a trip over to your terminal to see what the error is and fix it. Assuming you’ve followed this guide, it shouldn’t be anything more than a typo at this point.
+From here, if you’ve done everything right, you should see “ferris API” in your list of Endpoints (and nothing else probably). If it doesn’t show up, take a trip over to your terminal to see what the error is and fix it. Assuming you’ve followed this guide, it shouldn’t be anything more than a typo.
 
 After clicking on “ferris API”, you will be taken to a new list, this one of all the wonderful new services that we’ve just defined. Navigate to “ferris.posts.insert” to add some test posts.
 
@@ -81,7 +87,7 @@ Create a few posts, and then navigate back to the list of services and choose �
 
 Feel free to test some of the other services. Most of them will concern just one particular post, and will require the “urlsafe” item from a post’s key. Use it to delete, edit, or get a post.
 
-But what if we want to reference a post without using its key? A key is (usually) a long string of random characters. Maybe we want to get a post with a specific title, or search for all posts with a reference to “Ferris 3” in their content. How would we go about something like that?
+But what if we want to reference a post without using its key? A key is (usually) a long string of random characters. Maybe we want to get a post with a specific title, how would we go about something like that?
 
 
 A Little More Complexity
@@ -103,7 +109,7 @@ When building a method we use a similar decorator as we did when we built the cl
 
     @f3.auto_method()
 
-Note that since we imported f3, but not “auto_method” specifically, we had to address it through f3. We could’ve imported it specifically like we did with “auto_class” and then we wouldn’t have had to do so, or conversely we could’ve chosen not to import auto_class either and then could’ve used “f3.auto_class”. Until Ferris 3 conventions have been more rigidly defined, how you go about this is up to you.
+Note that since we imported f3, but not “auto_method” specifically, we had to address it through f3. We could’ve imported it specifically like we did with auto_service and then we wouldn’t have had to do so, or conversely we could’ve chosen not to import auto_class either and then could’ve used “f3.auto_class”. Until Ferris 3 conventions have been more rigidly defined, how you go about this is up to you.
 
 “auto_method” take a few arguments, namely “returns” and “name”. “returns” is the type of message that the service will return, and “name” is the name that the service will appear under in the API explorer. We’re going to return an instance of the “PostMessage” that we recently defined, and we’ll call our service “get_by_title”::
 
