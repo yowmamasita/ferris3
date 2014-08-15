@@ -1,9 +1,7 @@
-Ferris 3 Tutorial
+Tutorial
 =================
 
-.. note::
-    This tutorial is meant to be a quick guide on how to get a Ferris 3 project up and running and making some example api calls. It assumes you are familiar with Ferris 2 and explains Ferris 3 with this in mind.
-
+This tutorial will walk you through creating a simple API. If you haven't yet, be sure to read through the :doc:`introduction` and :doc:`getting_started` section. This assumes you've already created a new project.
 
 
 A Simple “Posts” Service
@@ -14,8 +12,8 @@ Let’s start with something easy to illustrate just how magical Ferris 3 actual
 First we will create a “posts” folder inside of the “app” folder.
 
 .. note::
-    For a refresher on how the new folder structure works, take a look at the :doc:`introduction` again. Also recall that any and every folder you create in your project will need an empty __init__.py file inside of it.
-    (editor’s note: when Google allows us to use Python 3, we’ll no longer have to do this).
+    For a refresher on how the new folder structure works, take a look at the :doc:`introduction` again. Also recall that python requires any and every folder you create in your project will need an empty __init__.py file inside of it.
+    (Note: when Google allows us to use Python 3, we’ll no longer have to do this, c'mon, Google!)
 
 Now we'll create the service file. The convention here is to use “[Service Name]_servcice.py”, or in this case "posts_service.py". Inside this file we will define all the different methods we’d like our Service to contain.
 
@@ -24,16 +22,26 @@ Before we start making methods to interact with Posts, however, we’ll need an 
     1. Create a separate models.py file that contains the models we need.
     2. Define the model inside our service file.
 
-For simplicity’s sake, and because our Posts model is relatively trivial, we’re going to go with option 2 (note how strongly different this is from the Ferris 2 recommendations). We’ll need to import the Model class and the ndb module using the following lines::
+For simplicity’s sake, and because our Posts model is relatively trivial, we’re going to go with inline option. While it may seem to fly in the face of traditional MVC conventions, we feel there's no need to make this any more complicated.
+
+At this point you should have a file structure that looks like this::
+
+    /app
+        /posts
+            /__init__.py
+            /posts_service.py
+
+
+Inside of ``posts_service.py`` we’ll need to import Ferris' Model class and the ndb module using the following lines::
 
     from google.appengine.ext import ndb
     from ferris3 import Model
 
 
-.. warning::
-    An important thing to note here is that we are importing ndb from the appengine module, not the ferris3 module. There is an ndb package inside the ferris3 module, but it’s not the one we want.
+.. note::
+    Notice that we are importing ndb from the appengine module, not the ferris3 module. There is an ndb package inside the ferris3 module, but it’s not the one we want.
 
-    Ferris’ module names match the modules they supplement. So ferris.ndb supplements google.appengine.ext, ferris.messages supplements protorpc.message, and ferris.endpoints supplements endpoints.
+    Ferris’ module names match the modules they supplement. So ``ferris.ndb`` supplements ```google.appengine.ext.ndb``, ``ferris.messages`` supplements ``protorpc.messages``, ``ferris.endpoints`` supplements ```endpoints``, etc.
 
 
 Now lets add our simple Posts model::
@@ -60,7 +68,29 @@ Now we get to “hvild”. hvild is where Ferris 3 truly shines, as it will allo
     update = hvild.update(Post)
 
 That’s it, just set your methods equal to their hvild counterparts and pass in the model that the methods manipulate (in this case “Post”).
-There are two more hvild method which will take just an ounce more effort to use, and those are paginated_list and search. The only difference is that along with the model, you must also pass in a “limit” parameter which will be the number of instances that appear on each page of the results. In our case, let’s include 3 posts per page by adding these lines::
+
+
+To recap, our ``posts_service.py`` should look like this::
+
+    from google.appengine.ext import ndb
+    from ferris3 import Model, Service, hvild, auto_service
+
+
+    class Post(Model):
+        title = ndb.StringProperty()
+        content = ndb.TextProperty()
+
+
+    @auto_service
+    class PostsService(Service):
+        list = hvild.list(Post)
+        get = hvild.get(Post)
+        delete = hvild.delete(Post)
+        insert = hvild.insert(Post)
+        update = hvild.update(Post)
+
+
+There are two more hvild methods which will take just an ounce more effort to use, and those are paginated_list and search. The only difference is that along with the model, you must also pass in a “limit” parameter which will be the number of instances that appear on each page of the results. In our case, let’s include 3 posts per page by adding these lines::
 
     paginated_list = hvild.list(Post, limit=3)
     search = hvild.search(Post, limit=3)
