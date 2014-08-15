@@ -7,9 +7,9 @@ Before we dive into creating an using APIs let's define some terminology:
 
  1. **API** is what your application exposes. Your application's API exposes various *endpoints*
  2. **Endpoints** are groups of exposed functionality. It contains the definition of the endpoints' properties including the name, authentication, and access control. Endpoints contain various *services*. When you create a new project you have a single default endpoint but an application can have multiple endpoints. Endpoints are defined using yaml files.
- 3. **Services** are python classes that *expose methods* to the *endpoint* and thus to the overall *API*.
+ 3. **Services** are Python classes that *expose methods* to the *endpoint* and thus to the overall *API*.
  4. **Method** are the individual functions that can be called by API clients. This is where you write the code to expose and process data.
- 5. **Messages** are the language spoken by an API. Messages are classes that define structured data for both data coming from API clients and data send to API clients.
+ 5. **Messages** are the language spoken by an API. Messages are classes that define structured data for both data coming from API clients and data sent to API clients.
 
 .. module:: ferris3.endpoints
 
@@ -17,18 +17,18 @@ Before we dive into creating an using APIs let's define some terminology:
 Defining Endpoints
 ------------------
 
-When you start a new ferris project a default endpoint is created for you and made available to clients and your application. However, you can modify this endpoint and add additional endpoints if desired. Endpoints are defined via yaml files stored in the ``app`` directory and the default one is stored at ``app/default-endpoint.yaml``.
+When you start a new Ferris project a default endpoint is created for you and made available to clients and your application. However, you can modify this endpoint and add additional endpoints if desired. Endpoints are defined via yaml files stored in the ``app`` directory. The default one is stored at ``app/default-endpoint.yaml``.
 
 Here's an annotated sample:
 
 .. code-block :: yaml
     
-    # Friendly name. Shows up in the Google API Explorer.
+    # Friendly name. Displayed in the Google API Explorer.
     canonical_name: Ferris Endpoint
-    # API name. Should be lower case and only contain letters, numbers and underscore.
-    # Used in the client librarys, ala gapi.client.ferris.
+    # API name. Should be lower case and only contain letters, numbers and underscores.
+    # Used in the client libraries, e.g. gapi.client.ferris.
     name: ferris
-    # API Version. Lower case and letters, numbers, and underscore.
+    # API Version. Should be lower case and only contain letters, numbers, and underscores.
     version: v1
     # Friendly description.
     description: Ferris-based Endpoint
@@ -43,7 +43,7 @@ Here's an annotated sample:
     - 462711127220-1mr3uha1ukgicv4s0ebvo26bulkpb4k1.apps.googleusercontent.com
 
 
-Once you've defined your endpoint you need to instruct ferris to load it and make it available. You'll need to modify ``main.py`` and add:
+Once you've defined your endpoint you need to instruct Ferris to load it and make it available. You'll need to modify ``main.py`` and add:
     
     endpoints.add('app/my-new-endpoint.yaml')
 
@@ -72,7 +72,7 @@ Services can be added to an endpoint using :func:`auto_service`::
     class ImagesApi(ferris3.Service):
         ...
 
-If you need more control, the endpoints loaded by Ferris are turned in to normal Google Cloud Endpoints API classes. This means you can follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_::
+If you need more control, the endpoints loaded by Ferris are turned into normal Google Cloud Endpoints API classes. You may follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_::
 
     import ferris3
 
@@ -100,10 +100,10 @@ The most basic example::
 
         @ferris3.auto_method
         def hello(self, request):
-            logging.info("Hello")
+            logging.info("Hello, is it me you're looking for?")
 
 
-This method doesn't return any data but simply logs "Hello" in the application log.
+This method simply logs "Hello, is it me you're looking for?" in the application log but does not return any data.
 
 
 Returning Data
@@ -131,7 +131,7 @@ In order to return some data to the client we'll need to define and use a messag
 Defining Parameters
 *******************
 
-Sometimes we like methods to take parameters. This is where things get a little more interesting. When using pure Google Cloud Endpoints you'd have to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_, but Ferris uses a technique called annotation to automatically handle this for you::
+Sometimes we want a method to take parameters. When using pure Google Cloud Endpoints you'd have to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_, but Ferris uses a technique called annotation to automatically handle this for you::
 
     @ferris3.auto_method(returns=HelloMessage)
     def hello(self, request, name=(str, 'Unknown')):
@@ -143,14 +143,14 @@ Notice this somewhat strange syntax: ``name=(str, 'Unknown')``. Annotations take
     def hello(self, request, name=(str,), age=(int, 18)):
         return HelloMessage(greeting="Hello, %s! You are %s" % (name, int))
 
-Now ``name`` is required but ``age`` is completely optional. You can observe this by using the API Explorer.
+``name`` is required but ``age`` is optional. You can observe this by using the API Explorer.
 
 
 
 Receiving Data
 **************
 
-Often we want to receive structured data from clients. Similar to sending data, we need define a message class for receiving data. We also need to tell the endpoint that we want to receive that message for our method which we can do with an annotation just like we did with parameters. Putting it all together we get something like this::
+Often we want to receive structured data from clients. Similar to sending data, we need define a message class for receiving data. We also need to tell the endpoint that we want to receive that message for our method which we can do with an annotation. Putting it all together we get something like this::
 
     from protorpc import messages
     import ferris3
@@ -183,4 +183,4 @@ Of course, you can combine a request message with parameters::
 
 
 .. warning::
-    When combining request messages with request parameters you must be careful not to have any fields that are named the same between the two. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
+    When combining request messages with request parameters, all names must be unique. You may not specify duplicate names. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
