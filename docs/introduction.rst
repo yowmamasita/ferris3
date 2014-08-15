@@ -20,13 +20,15 @@ Ferris constitutes just one part of your overall application structure. You woul
   1. **A backend created with Ferris**: This will provide APIs that can be consumed by various clients.
   2. **A web frontend created with HTML5 and JavaScript**: The user would interact with this frontend and the frontend would talk to the APIs provided by the ferris application.
 
-As your application grows, you may wish to add additional frontends such as Android, iOS, native Windows, PhoneGap, etc. Ferris makes this easier because your backend is separate and independent of your frontend. Google Cloud Endpoints provices client libraries for most languages and platforms. Ferris does not dictate how you build your frontend- you could even create a frontend using a traditional monolithic MVC framework and use your Ferris-based application as a service.
+As your application grows you may wish to add additional frontends such as Android, iOS, native Windows, PhoneGap, etc. Ferris makes this easier because your backend is separate and independent of your frontend. Because Ferris uses Google Cloud Endpoints there are client libraries for most languages and platforms. Ferris does not dictate how you build your frontend- you could even create a frontend using a traditional monolithic MVC framework and use your Ferris-based application as a service.
+
+At Cloud Sherpas, we use a AngularJS as our frontend techology of choice. We've created a lot of tools around using AngularJS along with Google Cloud Endpoints. Our toolkit is open-source and is called `Eydís <http://eydistoolkit.org>`_.
 
 
 Convention, Configuration, and Structure
 ----------------------------------------
 
-Ferris is relatively opinionated about application structure, however, ferris is flexible and there's always a way to configure it to do something differently. Our manta is to optimize for the common case but not at the expense of other cases. It's also part of our philosophy that if you're using another web framework on App Engine you should be able to use parts of Ferris that you find useful (such as model behaviors and search helpers).
+Ferris is relatively opinionated about application structure, however, Ferris is flexible and there's always a way to configure it to do something differently. Our mantra is to optimize for the common case but not at the expense of other cases. It's also part of our philosophy that if you're using another web framework on App Engine you should be able to use parts of Ferris that you find useful (such as model behaviors and search helpers).
 
 
 Supplemental, not inclusive
