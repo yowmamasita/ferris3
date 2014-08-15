@@ -9,11 +9,11 @@ Ferris 3 Tutorial
 A Simple “Posts” Service
 ------------------------
 
-Let’s start with something easy to illustrate just how magical Ferris 3 actually is: a Posts API. This will also give us a chance to get accustomed to the new folder organization in Ferris.
+Let’s start with something easy to illustrate just how magical Ferris 3 actually is: a Posts Service. This will also give us a chance to get accustomed to the new folder organization in Ferris.
 
-Ferris 3 implements something called “fractal hierarchy”. Unlike Ferris 2, where all controllers and models were housed inside overarching “controllers” and “models” folders, respectively, in this new paradigm controllers, models, services, and anything else relating to a specific module are all housed inside a folder named after that module.
+Ferris 3 implements something called “fractal hierarchy”. Unlike in Ferris 2, where all controllers and models were housed inside the overarching folders “controllers” and “models”, in this new paradigm controllers, models, handlers, and anything else relating to a specific service are all housed inside a folder named after that service.
 
-For instance, since we are building a Posts API, we will create a “posts” folder inside of the “app” folder. Now since Jon still hasn’t automated this yet, you still have to go through the gratuitous process of creating an empty __init__.py file right inside your posts folder. Feel free to scowl and send angry messages to Jon about this. (editor’s note: when google allows us to use python 3, we’ll no longer have to do this).
+For instance, since we are building a Posts service, we will create a “posts” folder inside of the “app” folder. Now since Jon still hasn’t automated this yet, you still have to go through the gratuitous process of creating an empty __init__.py file right inside your posts folder. Feel free to scowl and send angry messages to Jon about this. (editor’s note: when google allows us to use python 3, we’ll no longer have to do this).
 
 With that out of the way, create another file inside of the posts folder called “posts_api.py”. The convention here is to use “[Module Name]_api.py”. Inside this file we will define all the different methods we’d like our API to contain.
 
