@@ -67,3 +67,9 @@ Deploying
 ---------
 
 Ferris applications are deployed just like any other App Engine application. See Google's `documentation on deploying applications <https://developers.google.com/appengine/docs/python/gettingstartedpython27/uploading>`_.
+
+
+Continue
+********
+
+Continue on to the :doc:`tutorial` or dive into the :doc:`users_guide/index`.

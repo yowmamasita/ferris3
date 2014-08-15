@@ -77,7 +77,7 @@ Whereas in Ferris you would instead organize this application this way::
     users
         - models.py
 
-We believe this structure improved readability and makes it easier to maintain applications with large amounts of features.
+We believe this structure improves readability and makes it easier to maintain applications with large amounts of features.
 
 
 Continue
