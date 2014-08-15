@@ -106,7 +106,7 @@ def auto_service(cls=None, endpoint=None, **kwargs):
     return auto_class_decr
 
 
-def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='GET'):
+def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='POST'):
     def auto_api_decr(func):
         func_name = func.__name__ if not name else name
         func = annotated(returns=returns)(func)

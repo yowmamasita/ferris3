@@ -6,7 +6,7 @@ Ferris provides some utilities on top of Google Cloud Endpoints to make it easie
 Before we dive into creating an using APIs let's define some terminology:
 
  1. **API** is what your application exposes. Your application's API exposes various *endpoints*
- 2. **Endpoints** are groups of exposed functionality. It contains the definition of the endpoints's properties including the name, authentication, and access control. Endpoints contain various *services*. When you create a new project you have a single default endpoint but an application can have multiple endpoints. Endpoints are defined using yaml files.
+ 2. **Endpoints** are groups of exposed functionality. It contains the definition of the endpoints' properties including the name, authentication, and access control. Endpoints contain various *services*. When you create a new project you have a single default endpoint but an application can have multiple endpoints. Endpoints are defined using yaml files.
  3. **Services** are python classes that *expose methods* to the *endpoint* and thus to the overall *API*.
  4. **Method** are the individual functions that can be called by API clients. This is where you write the code to expose and process data.
  5. **Messages** are the language spoken by an API. Messages are classes that define structured data for both data coming from API clients and data send to API clients.
@@ -85,7 +85,102 @@ If you need more control, the endpoints loaded by Ferris are turned in to normal
 The default endpoint is available via :func:`default` and you can get a particular endpoint by name via :func:`get`.
 
 
-Exposing API Methods
---------------------
+Exposing Methods
+----------------
 
-TODO
+A service doesn't do much good with methods. The :func:`auto_method` decorator helps expose class methods as API methods.
+
+The most basic example::
+
+    import ferris3
+    import logging
+
+    @ferris3.auto_service
+    class HelloService(ferris3.Service):
+
+        @ferris3.auto_method
+        def hello(self, request):
+            logging.info("Hello")
+
+
+This method doesn't return any data but simply logs "Hello" in the application log.
+
+
+Returning Data
+**************
+
+In order to return some data to the client we'll need to define and use a message. We can use the ``returns`` parameter of :func:`auto_method` to do this::
+
+    from protorpc import messages
+    import ferris3
+
+    # Define a simple message with one field
+    class HelloMessage(messages.Message):
+        greeting = messages.StringField(1)
+
+
+    @ferris3.auto_service
+    class HelloService(ferris3.Service):
+
+        # Notice we pass in a "returns" parameter here, informing the endpoint what kind of message this method will return.
+        @ferris3.auto_method(returns=HelloMessage)
+        def hello(self, request):
+            return HelloMessage(greeting="Hello!")
+
+
+Defining Parameters
+*******************
+
+Sometimes we like methods to take parameters. This is where things get a little more interesting. When using pure Google Cloud Endpoints you'd have to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_, but Ferris uses a technique called annotation to automatically handle this for you::
+
+    @ferris3.auto_method(returns=HelloMessage)
+    def hello(self, request, name=(str, 'Unknown')):
+        return HelloMessage(greeting="Hello, %s!" % name)
+
+Notice this somewhat strange syntax: ``name=(str, 'Unknown')``. Annotations take the form of ``parameter=(type, default)``. By defining the type and default value we can keep our API strongly typed. The default value is optional and if we leave it out the parameter becomes required to call our method. For example::
+
+    @ferris.auto_method(returns=HelloMessage)
+    def hello(self, request, name=(str,), age=(int, 18)):
+        return HelloMessage(greeting="Hello, %s! You are %s" % (name, int))
+
+Now ``name`` is required but ``age`` is completely optional. You can observe this by using the API Explorer.
+
+
+
+Receiving Data
+**************
+
+Often we want to receive structured data from clients. Similar to sending data, we need define a message class for receiving data. We also need to tell the endpoint that we want to receive that message for our method which we can do with an annotation just like we did with parameters. Putting it all together we get something like this::
+
+    from protorpc import messages
+    import ferris3
+
+    # We'll use this new message for the client to send us a list of names.
+    class PeopleMessage(messages.Message):
+        people = messages.StringFrield(1, repeated=True)
+
+    # We'll use the same message from before to send data back to the client.
+    class HelloMessage(messages.Message):
+        greeting = messages.StringField(1)
+
+
+    @ferris3.auto_service
+    class HelloService(ferris3.Service):
+
+        @ferris3.auto_method(returns=HelloMessage)
+        def hello(self, request=(PeopleMessage,)):  # Notice the annotation for request
+            names = ', '.join(request.people)
+            return HelloMessage(greeting="Hello %s!" % names)
+
+If you use the APIs explorer, you'll see you now can provide a request body with a list of names.
+
+Of course, you can combine a request message with parameters::
+
+    @ferris3.auto_method(returns=HelloMessage)
+    def hello(self, request=(PeopleMessage,), greeting=(str, 'Hello')):
+        names = ', '.join(request.people)
+        return HelloMessage(greeting="%s %s!" % (greeting, names))
+
+
+.. warning::
+    When combining request messages with request parameters you must be careful not to have any fields that are named the same between the two. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
