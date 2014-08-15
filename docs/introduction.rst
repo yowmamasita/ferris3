@@ -27,3 +27,60 @@ Convention, Configuration, and Structure
 ----------------------------------------
 
 Ferris is relatively opinionated about application structure, however, ferris is flexible and there's always a way to configure it to do something differently. Our manta is to optimize for the common case but not at the expense of other cases. It's also part of our philosophy that if you're using another web framework on App Engine you should be able to use parts of Ferris that you find useful (such as model behaviors and search helpers).
+
+
+Supplemental, not inclusive
+---------------------------
+
+Similar to the JavaScript idea of wrapping the DOM instead of extending is, most of Ferris `supplements` another module. For example, Ferris provides many utilities around App Engine's ``ndb`` module. You use ferris' ndb along with app engine's ndb, not instead of it::
+
+    import ferris3
+    from google.appengine.ext import ndb
+
+
+    class Model(ferris3.ndb.Model):
+        title = ndb.StringProperty()
+
+        def before_put(self):
+            self.title = self.title.lower()
+
+
+Notice that we still use ``ndb``, we just use ``ferris3.ndb`` along side it. This pattern is oft repeated in ferris. ``ferris3.messages`` supplements ``protorpc.messages``, ``ferris3.endpoints`` supplements ``endpoints``, and so on.
+
+
+Organization by feature, not function
+-------------------------------------
+
+Ferris applications are generally organized by feature which is in contrast to MVC frameworks that organize by structure. For example, a typical MVC application would have a structure like so::
+
+    controllers
+        - posts.py
+        - pages.py
+        - images.py
+    models
+        - post.py
+        - page.py
+        - image.py
+        - user.py
+
+Whereas in Ferris you would instead organize this application this way::
+
+    posts
+        - models.py
+        - posts_api.py
+    pages
+        - models.py
+        - pages_api.py
+    images
+        - models.py
+        - images_api.py
+    users
+        - models.py
+
+We believe this structure improved readability and makes it easier to maintain applications with large amounts of features.
+
+
+Continue
+********
+
+Continue on to :doc:`getting_started` or the :doc:`tutorial`.

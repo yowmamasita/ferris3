@@ -4,8 +4,84 @@ from protorpc import messages
 import endpoints
 from .anodi import annotated
 import inspect
-from . import endpoints_apis
 import re
+import yaml
+import os
+
+_endpoints = {}
+_default_endpoint_name = None
+
+base_directory = os.getcwd()
+
+
+def add(config_or_file, default=False):
+    """
+    Add an endpoint.
+    """
+    global _endpoints, _default_endpoint_name
+
+    if isinstance(config_or_file, (str, unicode)):
+        config = load_config_file(config_or_file)
+    else:
+        config = config_or_file
+
+    api = endpoints.api(**config)
+    _endpoints[config['name']] = api
+
+    if default:
+        _default_endpoint_name = config['name']
+
+    return api
+
+
+def get(name=None):
+    """Get an endpoint"""
+    if not name:
+        if not _default_endpoint_name:
+            raise RuntimeError("No default endpoint has been configured")
+        name = _default_endpoint_name
+
+    return _endpoints.get(name)
+
+
+def default():
+    return get()
+
+
+def get_all():
+    return _endpoints.values()
+
+
+def load_config_file(config_file):
+    with open(os.path.join(base_directory, config_file)) as f:
+        config = yaml.load(f)
+
+    # Replace constants
+    recursive_replace(config, 'API_EXPLORER_CLIENT_ID', endpoints.API_EXPLORER_CLIENT_ID)
+    recursive_replace(config, 'USERINFO', 'https://www.googleapis.com/auth/userinfo.email')
+
+    auth_level = config.get('auth_level', 'optional')
+    config['auth_level'] = {
+        'required': endpoints.AUTH_LEVEL.REQUIRED,
+        'optional': endpoints.AUTH_LEVEL.OPTIONAL,
+        'optional_continue': endpoints.AUTH_LEVEL.OPTIONAL_CONTINUE,
+        'none': endpoints.AUTH_LEVEL.NONE
+    }.get(auth_level)
+
+    return config
+
+
+def recursive_replace(container, old, new):
+    if isinstance(container, dict):
+        for key, value in container.iteritems():
+            if value == old:
+                container[key] = new
+            if isinstance(value, (dict, list)):
+                recursive_replace(value, old, new)
+    else:
+        for ix, value in enumerate(container):
+            if value == old:
+                container[ix] = new
 
 
 def underscore(string):
@@ -13,16 +89,16 @@ def underscore(string):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 
-def auto_class(cls=None, api=None, **kwargs):
+def auto_class(cls=None, endpoint=None, **kwargs):
     def auto_class_decr(cls):
         if 'resource_name' not in kwargs:
-            name = underscore(cls.__name__).replace('_api', '')
+            name = underscore(cls.__name__).replace('_api', '').replace('_service', '')
             kwargs['resource_name'] = name
 
         if 'path' not in kwargs:
             kwargs['path'] = kwargs['resource_name']
 
-        ep_api = endpoints_apis.get(api)
+        ep_api = get(endpoint)
         return ep_api.api_class(**kwargs)(cls)
 
     if cls:
