@@ -1,13 +1,13 @@
 Getting Started
 ===============
 
-This section walks you trough setting up your environment and creating an empty Ferris project. For an introduction to what Ferris is and how it can help, see :doc:`introduction`.
+This section walks you through setting up your environment and creating an empty Ferris project. For an introduction to what Ferris is and how it can help, see :doc:`introduction`.
 
 
 Installing pre-requisites
 -------------------------
 
-Ferris require installation of a handful of pre-requisites.
+Ferris require installation of a handful of prerequisites.
 
  1. Up-to-date installation of Python 2.7.x and pip.
  2. `Google Cloud SDK <https://developers.google.com/cloud/sdk/>`_ or alternatively, the `Google App Engine Python SDK <https://developers.google.com/appengine/downloads>`_.
@@ -20,12 +20,12 @@ If you want to take advantage of the easiest way of using Ferris you'll need:
  2. `Yeoman <http://yeoman.io/>`_
  3. `The Ferris 3 Generator <https://bitbucket.org/cloudsherpas/ferris-3-generator>`_
 
-If you already have node just run::
+If you already have node, run::
 
     npm install -g yo generator-ferris
 
 .. tip::
-    Sometimes setting up an environment can be weird and difficult. We feel your pain. If you run into trouble feel free to reach out to us on the mailing list. We generally recommend Ubuntu for development as setting up the Google Cloud SDK on linux is extremely easy- we've even written a `script to setup a complete environment <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap>`_ on ubuntu. You can also use vagrant to run a headless ubuntu VM on Windows or OSX- we even have an example `Vagrantfile <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap/src/master/Vagrantfile>`_ to get you going. 
+    Sometimes setting up an environment can be weird and difficult. We feel your pain. If you run into trouble feel free to reach out to us on the mailing list. We generally recommend Ubuntu for development as setting up the Google Cloud SDK on Linux is extremely easy. We've even written a `script to setup a complete environment <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap>`_ on Ubuntu. You can also use vagrant to run a headless Ubuntu VM on Windows or OSX; we even have an example `Vagrantfile <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap/src/master/Vagrantfile>`_ to get you going. 
 
 
 Starting a new project
