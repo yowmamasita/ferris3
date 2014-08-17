@@ -16,7 +16,20 @@ base_directory = os.getcwd()
 
 def add(config_or_file, default=False):
     """
-    Add an endpoint.
+    Add an endpoint to the registry.
+
+    ``config_or_file`` can be the path to a yaml definition file or a dictionary of arguments to pass to
+    ``endpoints.api``. See also Google's documentation on `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_the_api_endpointsapi>`_.
+
+    Tpyically, this is called in an application's ``main.py`` before any services are loaded.
+
+    Examples::
+
+        ferris3.endpoints.add('app/default-endpoint.yaml', default=True)
+        ferris3.endpoints.add({
+            name: 'test',
+            version: 'v1'
+        })
     """
     global _endpoints, _default_endpoint_name
 
@@ -35,7 +48,22 @@ def add(config_or_file, default=False):
 
 
 def get(name=None):
-    """Get an endpoint"""
+    """
+    Get an endpoint by name from the registry.
+
+    The value returned is a normal `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_ class that can be used exactly as descibed in the Google documentionat.
+
+    ``name`` is the value of the ``name`` configuration field given for the endpoint. If no name is provided, it'll return the default endpoint.
+
+    Examples::
+
+        endpoint = ferris3.endpoints.get('ferris')
+
+        @endpoint.api_class(resource_name='shelves')
+        class ShelvesService(remote.Service):
+            ...
+
+    """
     if not name:
         if not _default_endpoint_name:
             raise RuntimeError("No default endpoint has been configured")
@@ -45,6 +73,9 @@ def get(name=None):
 
 
 def default():
+    """
+    Simply calls :func:`get` for the default endpoint.
+    """
     return get()
 
 
@@ -90,6 +121,28 @@ def underscore(string):
 
 
 def auto_service(cls=None, endpoint=None, **kwargs):
+    """
+    Automatically configures and adds a ``remote.Service`` class to the endpoint service registry.
+
+    If ``endpoint`` is None then the default endpoint will be used. If it is a string then the endpoint will be looked up in the registry using :func:`get`.
+
+    The ``resource_name`` and ``path`` configuration options are automatically determined from the class name.
+    For example, "PostsService" becomes "posts" and "FuzzyBearsService" becomes "fuzzy_bears". These can be overriden by
+    passing in the respecitve kwargs.
+
+    All kwargs are passed directly through to `endpoints.api_class <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_.
+
+    Examples::
+
+        @ferris3.auto_service
+        class PostsService(ferris3.Service):
+            ...
+
+        @ferris3.auto_service(endpoint='mobile_only', resource_name='posts', path='posts')
+        class MobilePostsService(ferris3.Service):
+            ...
+
+    """
     def auto_class_decr(cls):
         if 'resource_name' not in kwargs:
             name = underscore(cls.__name__).replace('_api', '').replace('_service', '')
@@ -106,7 +159,40 @@ def auto_service(cls=None, endpoint=None, **kwargs):
     return auto_class_decr
 
 
-def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='POST'):
+def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='POST', **kwargs):
+    """
+    Uses introspection to automatically configure and expose an API method. This is sugar around `endpoints.method <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_an_api_method_endpointsmethod>`_.
+
+    The ``returns`` argument is the response message type and is by default ``message_types.VoidMessage`` (an empty response).
+    The ``name`` argument is optional and if left out will be set to the name of the function.
+    The ``http_method`` argument is ``POST`` by default and can be changed if desired. Note that ``GET`` methods can not accept a request message.
+    The remaining ``kwargs`` are passed direction to ``endpoints.method``.
+
+    This decorator uses introspection along with annotation to determine the request message type as well as any query string parameters for the method. This saves you the trouble of having to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_.
+
+    Examples::
+
+        # A method that takes nothing and returns nothing.
+        @auto_method
+        def nothing(self, request):
+            pass
+
+        # A method that returns a simple message
+        @auto_method(returns=SimpleMessage)
+        def simple(self, request):
+            return SimpleMessage(content="Hello")
+
+        # A method that takes a simple message as a request
+        @auto_method
+        def simple_in(self, request=(SimpleMessage,)):
+            pass
+
+        # A method that takes 2 required parameters and one optional one.
+        @auto_method
+        def params(self, request, one=(str,), two=(int,), three=(str, 'I am default')):
+            pass
+
+    """
     def auto_api_decr(func):
         func_name = func.__name__ if not name else name
         func = annotated(returns=returns)(func)
@@ -128,7 +214,8 @@ def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_me
             ResponseMessage,
             http_method=http_method,
             name=func_name,
-            path=func_name  #TODO: include required params
+            path=func_name,  #TODO: include required params,
+            **kwargs
         )
 
         def inner(self, request):
