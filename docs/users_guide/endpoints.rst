@@ -157,7 +157,7 @@ Often we want to receive structured data from clients. Similar to sending data, 
 
     # We'll use this new message for the client to send us a list of names.
     class PeopleMessage(messages.Message):
-        people = messages.StringFrield(1, repeated=True)
+        people = messages.StringField(1, repeated=True)
 
     # We'll use the same message from before to send data back to the client.
     class HelloMessage(messages.Message):
