@@ -3,6 +3,12 @@ Endpoints
 
 Ferris provides some utilities on top of Google Cloud Endpoints to make it easier to define an expose endpoints.
 
+.. contents::
+    :local:
+
+Terminology
+-----------
+
 Before we dive into creating an using APIs let's define some terminology:
 
  1. **API** is what your application exposes. Your application's API exposes various *endpoints*
