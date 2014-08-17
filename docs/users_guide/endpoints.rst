@@ -11,8 +11,6 @@ Before we dive into creating an using APIs let's define some terminology:
  4. **Method** are the individual functions that can be called by API clients. This is where you write the code to expose and process data.
  5. **Messages** are the language spoken by an API. Messages are classes that define structured data for both data coming from API clients and data sent to API clients.
 
-.. module:: ferris3.endpoints
-
 
 Defining Endpoints
 ------------------
@@ -184,3 +182,16 @@ Of course, you can combine a request message with parameters::
 
 .. warning::
     When combining request messages with request parameters, all names must be unique. You may not specify duplicate names. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
+
+
+API Reference
+-------------
+
+
+.. module:: ferris3.endpoints
+
+.. autofunction:: auto_service
+.. autofunction:: auto_method
+.. autofunction:: get
+.. autofunction:: default
+.. autofunction:: add

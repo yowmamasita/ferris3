@@ -18,7 +18,24 @@ import os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+
+sys.path.insert(0, os.path.abspath('..'))
+
+if 'APPENGINE_SDK_PATH' not in os.environ:
+    raise ValueError("No app engine sdk path configured. Define the APPENGINE_SDK_PATH environment variable.")
+
+sys.path.insert(0, os.environ['APPENGINE_SDK_PATH'])
+
+# Fix app engine imports
+import google
+reload(google)  # Remove wrong module
+import dev_appserver
+dev_appserver.fix_sys_path()
+
+from google.appengine.ext import testbed
+testbed = testbed.Testbed()
+testbed.activate()
+testbed.init_memcache_stub()
 
 # -- General configuration ------------------------------------------------
 
