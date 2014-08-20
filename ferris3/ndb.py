@@ -25,7 +25,7 @@ class ModelMeta(ndb.model.MetaModel):
 
 class Model(ndb.Model):
     """
-    Model that has behaviors attached to it.
+    ``ndb.Model`` subclass that supports easier callbacks and behaviors.
     """
     __metaclass__ = ModelMeta
 
@@ -127,8 +127,7 @@ class Model(ndb.Model):
 
 class Behavior(object):
     """
-    Behavior mimics all of the callbacks in the Model class to allow you to stack unrelated
-    callbacks together
+    Behaviors allow you to encapsulate callbacks into discrete units that can be combined together.
     """
     def __init__(self, Model):
         self.Model = Model
