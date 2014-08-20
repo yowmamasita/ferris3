@@ -9,3 +9,4 @@ The user's guide provides both API and usage documentation for all of Ferris' fe
    endpoints
    datastore
    caching
+   google_apis

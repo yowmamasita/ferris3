@@ -13,8 +13,12 @@ def build(serviceName, version, credentials):
     the number of calls to the discovery API as well as making it easy to share
     the client across multiple parts of code with little effort.
 
-    Usage is exactly like apiclient.discovery.build::
+    Usage is similar to ``apiclient.discovery.build``, however, instead of passing an http instance
+    you just pass in valid credentials and this method will handle constructing an appropriate http instance for you.
 
+    Example::
+
+        credentials = oauth2.build_service_account_credentials(["https://www.googleapis.com/auth/drive"])
         drive = build("drive", "v2", credentials)
 
     """
