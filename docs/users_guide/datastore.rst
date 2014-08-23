@@ -9,11 +9,11 @@ Ferris provides several supplemental utilities on top of the `NDB Datastore API 
 The Model Class
 ---------------
 
-Ferris includes a model class that inherits from ``ndb.Model`` and adds some additional functionality. Use of the Ferris model is completely optional and most ferris functionality works with standard ``ndb.Model`` objects.
+Ferris includes a model class that inherits from ``ndb.Model`` and adds some additional functionality. Use of the Ferris model is completely optional and most Ferris functionality works with standard ``ndb.Model`` objects.
 
 .. autoclass:: Model
 
-You define these models in the exact same was as you do with ndb::
+You define these models in the exact same way as you do with ndb::
 
     import ferris3
     from google.appengine.ext import ndb
@@ -43,7 +43,7 @@ These methods are useful for replicating database triggers, enforcing applicatio
 Behaviors
 ---------
 
-Taking callbacks a bit further we get *Behaviors*. Behaviors are ways of packaging up related callbacks into a re-usable components. For example, you may write a behavior that notifies the creator of an item when their item is deleted. You can then attach this behavior to multiple models to easily add this functionality to multiple parts of your application. Such a behavior might look like this::
+*Behaviors* are ways of packaging up related callbacks into reusable components. For example, you may write a behavior that notifies the creator of an item when their item is deleted. You may attach this behavior to multiple models. For example, a behavior might look like this::
     
     class NotifyOnDelete(ferris3.ndb.Behavior):
         def before_delete(self, key):
@@ -59,7 +59,7 @@ This behavior can be attached to any model that has an ``author`` and ``title`` 
         title = ndb.StringProperty()
         author = ndb.StringProperty()
 
-Behaviors can be combined and each behavior's callbacks are triggered along with the model's. So for example if you wanted to use ``NotifyOnDelete`` as well as a new behavior like ``FixTitle``::
+Behaviors can be combined and each behavior's callbacks are triggered along with the model's. For example if you wanted to use ``NotifyOnDelete`` as well as a new behavior like ``FixTitle``::
 
     class Post(ferris3.ndb.Model):
         class Meta:

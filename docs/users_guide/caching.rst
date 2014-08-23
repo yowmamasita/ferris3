@@ -1,7 +1,7 @@
 Caching
 =======
 
-Ferris provides extensive tools for caching data. Taking advantage of the caching can significantly reduce your applications ongoing cost while at the same time decreasing latency and improving responsiveness. The caching utilities can use multiple storage backends to suit different purposes: `App Engine's Memcache API <https://developers.google.com/appengine/docs/python/memcache/>`_, the Cloud Datastore, or local in-process memory.
+Ferris provides extensive tools for caching data. Taking advantage of caching can significantly reduce your applications ongoing cost while decreasing latency and improving responsiveness. The caching utilities can use multiple storage backends to suit different purposes: `App Engine's Memcache API <https://developers.google.com/appengine/docs/python/memcache/>`_, the Cloud Datastore, or local in-process memory.
 
 
 .. module:: ferris3.caching
