@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from . import ndb, messages, template, settings
+from . import ndb, messages, template, settings, hvild
 from protorpc.remote import Service
 from protorpc.message_types import VoidMessage
 from .endpoints import auto_method, auto_service
