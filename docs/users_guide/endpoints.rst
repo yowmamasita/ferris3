@@ -1,7 +1,7 @@
 Endpoints
 =========
 
-Ferris provides some utilities on top of `Google Cloud Endpoints <https://developers.google.com/appengine/docs/python/endpoints/>`_ to make it easier to define an expose endpoints.
+Ferris provides some utilities on top of `Google Cloud Endpoints <https://developers.google.com/appengine/docs/python/endpoints/>`__ to make it easier to define an expose endpoints.
 
 .. contents::
     :local:
@@ -76,7 +76,7 @@ Services can be added to an endpoint using :func:`auto_service`::
     class ImagesApi(ferris3.Service):
         ...
 
-If you need more control, the endpoints loaded by Ferris are turned into normal Google Cloud Endpoints API classes. You may follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_::
+If you need more control, the endpoints loaded by Ferris are turned into normal Google Cloud Endpoints API classes. You may follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`__::
 
     import ferris3
 
@@ -135,7 +135,7 @@ In order to return some data to the client we'll need to define and use a messag
 Defining Parameters
 *******************
 
-Sometimes we want a method to take parameters. When using pure Google Cloud Endpoints you'd have to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_, but Ferris uses a technique called annotation to automatically handle this for you::
+Sometimes we want a method to take parameters. When using pure Google Cloud Endpoints you'd have to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`__, but Ferris uses a technique called annotation to automatically handle this for you::
 
     @ferris3.auto_method(returns=HelloMessage)
     def hello(self, request, name=(str, 'Unknown')):

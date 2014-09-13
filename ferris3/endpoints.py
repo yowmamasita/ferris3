@@ -19,7 +19,7 @@ def add(config_or_file, default=False):
     Add an endpoint to the registry.
 
     ``config_or_file`` can be the path to a yaml definition file or a dictionary of arguments to pass to
-    ``endpoints.api``. See also Google's documentation on `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_the_api_endpointsapi>`_.
+    ``endpoints.api``. See also Google's documentation on `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_the_api_endpointsapi>`__.
 
     Tpyically, this is called in an application's ``main.py`` before any services are loaded.
 

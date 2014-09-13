@@ -71,7 +71,7 @@ Now we get to ``hvild``. Hvild is one of the more magical parts of Ferris and it
     insert = hvild.insert(Post)
     update = hvild.update(Post)
 
-That’s it, just set your methods equal to their hvild counterparts and pass in the model that the methods manipulate (in this case ``Post`).
+That’s it, just set your methods equal to their hvild counterparts and pass in the model that the methods manipulate (in this case ``Post``).
 
 
 To recap, our ``posts_service.py`` should look like this::
