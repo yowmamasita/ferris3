@@ -248,12 +248,14 @@ def annotations_to_resource_container(annotations, defaults, RequestMessage):
     if annotations:
         for n, (name, type) in enumerate(annotations.iteritems(), 1):
             required = True if name not in defaults else False
+            default = defaults[name] if not required else None
 
             if type == str:
-                args[name] = messages.StringField(n, required=required)
+                args[name] = messages.StringField(n, required=required, default=default)
             if type == int:
-                args[name] = messages.IntegerField(n, required=required)
-            #TODO: more types
+                args[name] = messages.IntegerField(n, required=required, default=default)
+            if type == bool:
+                args[name] = messages.BooleanField(n, required=required, default=default)
 
     if args:
         return endpoints.ResourceContainer(RequestMessage, **args), args.keys()
