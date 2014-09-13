@@ -1,6 +1,28 @@
 from __future__ import absolute_import
 from google.appengine.ext import ndb
 import hashlib
+import endpoints
+import os
+from oauth2client.client import AccessTokenCredentials
+
+
+def get_endpoints_credentials():
+    """
+    Gets the oauth2 credentials from the user authenticated to Google Cloud Endpoints.
+
+    Presently, this does not work for Android and iOS clients. We are open to patches to fix it.
+    """
+    user = endpoints.get_current_user()
+    if not user:
+        return False
+
+    if not 'HTTP_AUTHORIZATION' in os.environ:
+        return False
+
+    token = os.environ['HTTP_AUTHORIZATION'].split(' ').pop()
+    credentials = AccessTokenCredentials(token, 'appengine:ferris')
+
+    return credentials
 
 
 def _get_config():
@@ -21,7 +43,7 @@ from oauth2client.appengine import StorageByKeyName, CredentialsNDBProperty
 
 def build_service_account_credentials(scope, user=None):
     """
-    Builds service account credentials using the configuration stored in settings
+    Builds service account credentials using the configuration stored in :mod:`~ferris3.settings`
     and masquerading as the provided user.
     """
     if not SignedJwtAssertionCredentials:
