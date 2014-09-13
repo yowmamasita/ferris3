@@ -8,6 +8,8 @@ Welcome to Ferris 3
 
 Welcome! There are multiple sections of documentation. For some background on Ferris check out :doc:`introduction`. Most people begin with :doc:`getting_started` and then move on to the :doc:`tutorial`. Once you're comfortable with those take a deep dive into the :doc:`users_guide` and check out some :doc:`common_patterns`.
 
+If you're interested in using Ferris' utilities within an existing framework, see :doc:`ferris_as_a_library`.
+
 
 Contents:
 
@@ -19,6 +21,7 @@ Contents:
    tutorial
    common_patterns
    users_guide/index.rst
+   ferris_as_a_library
 
 
 

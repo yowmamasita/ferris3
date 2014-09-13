@@ -9,18 +9,18 @@ Developing in the Google Cloud
 
 Ferris is intended to make it easier to develop modern applications within Google's Cloud Platform. Recently, there has been a significant shift away from monolithic server-side web application because of advancements in client-side technology. As the "MVC" and UI logic shifts to clients the role of the application server changes into something that no longer fits nicely into traditional MVC. Instead, the web application becomes an `API backend` and is responsible for exposing data and business logic to one or more frontend clients.
 
-Ferris 3 is geared toward creating these API backends that run on Google App Engine and to streamline accessing that backend from various frontends running on various platforms such as HTML5, Android, and iOS. Ferris embraces the platform and extends `Google Cloud Endpoints <https://developers.google.com/appengine/docs/python/endpoints/>`_ with opinionated tools to make it faster and easier to create APIs.
+Ferris 3 is geared toward creating these API backends that run on Google App Engine and to streamline accessing that backend from various frontends running on multiple platforms such as HTML5, Android, and iOS. Ferris embraces the platform and extends `Google Cloud Endpoints <https://developers.google.com/appengine/docs/python/endpoints/>`_ with opinionated tools to make it faster and easier to create APIs.
 
 
 Overall Application Structure
 -----------------------------
 
-Ferris constitutes just one part of your overall application structure. You would start with two basic pieces:
+Ferris constitutes just one part of your overall application structure. For example you may start with two basic pieces:
     
   1. **A backend created with Ferris**: This will provide APIs that can be consumed by various clients.
   2. **A web frontend created with HTML5 and JavaScript**: The user would interact with this frontend and the frontend would talk to the APIs provided by the ferris application.
 
-As your application grows you may wish to add additional frontends such as Android, iOS, native Windows, PhoneGap, etc. Ferris makes this easier because your backend is separate and independent of your frontend. Because Ferris uses Google Cloud Endpoints there are client libraries for most languages and platforms. Ferris does not dictate how you build your frontend- you could even create a frontend using a traditional monolithic MVC framework and use your Ferris-based application as a service.
+As your application grows you may wish to add additional frontends such as Android, iOS, native Windows, PhoneGap, etc. Ferris makes this easier because your backend is separate and independent of your frontend. Because Ferris uses Google Cloud Endpoints there are client libraries for most languages and platforms. Ferris does not dictate how you build your frontend. You could even create a frontend using a traditional monolithic MVC framework and use your Ferris-based application as a service.
 
 At Cloud Sherpas, we use a AngularJS as our frontend techology of choice. We've created a lot of tools around using AngularJS along with Google Cloud Endpoints. Our toolkit is open-source and is called `Eydís <http://eydistoolkit.org>`_.
 
@@ -28,7 +28,7 @@ At Cloud Sherpas, we use a AngularJS as our frontend techology of choice. We've 
 Convention, Configuration, and Structure
 ----------------------------------------
 
-Ferris is relatively opinionated about application structure, however, Ferris is flexible and there's always a way to configure it to do something differently. Our mantra is to optimize for the common case but not at the expense of other cases. It's also part of our philosophy that if you're using another web framework on App Engine you should be able to use parts of Ferris that you find useful (such as model behaviors and search helpers).
+Ferris is relatively opinionated about application structure, however, Ferris is flexible and there's always a way to configure it to do something differently. Our mantra is to optimize for the common case but not at the expense of other cases. It's also part of our philosophy that if you're using another web framework on App Engine you should be able to use parts of Ferris that you find useful (such as model behaviors and search helpers). See :doc:`ferris_as_a_library` for more information.
 
 
 Supplemental, not inclusive
