@@ -8,6 +8,7 @@ The user's guide provides both API and usage documentation for all of Ferris' fe
 
    endpoints
    datastore
+   messages
    caching
    oauth2
    google_apis

@@ -132,6 +132,9 @@ In order to return some data to the client we'll need to define and use a messag
             return HelloMessage(greeting="Hello!")
 
 
+For more details on creating messages see :doc:`messages`.
+
+
 Defining Parameters
 *******************
 
