@@ -1,7 +1,7 @@
 Endpoints
 =========
 
-Ferris provides some utilities on top of Google Cloud Endpoints to make it easier to define an expose endpoints.
+Ferris provides some utilities on top of `Google Cloud Endpoints <https://developers.google.com/appengine/docs/python/endpoints/>`_ to make it easier to define an expose endpoints.
 
 .. contents::
     :local:
@@ -92,7 +92,7 @@ The default endpoint is available via :func:`default` and you can get a particul
 Exposing Methods
 ----------------
 
-A service doesn't do much good with methods. The :func:`auto_method` decorator helps expose class methods as API methods.
+A service doesn't do much good without some methods. The :func:`auto_method` decorator helps expose class methods as API methods.
 
 The most basic example::
 
@@ -187,7 +187,7 @@ Of course, you can combine a request message with parameters::
 
 
 .. warning::
-    When combining request messages with request parameters, all names must be unique. You may not specify duplicate names. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
+    When combining request messages with request parameters the field and parameter names must be unique. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
 
 
 API Reference

@@ -11,7 +11,7 @@ Building Clients
 
 .. autofunction:: build
 
-As demonstrated, valid credentials can be obtained with the help of :doc:`oauth2`.
+As demonstrated, valid credentials can be obtained with the help of :mod:`ferris3.oauth2` or with any valid credentials from Google's `oauth2client <https://developers.google.com/api-client-library/python/guide/aaa_oauth>`_.
 
 
 Exponential Backoff
