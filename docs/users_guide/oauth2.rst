@@ -1,11 +1,11 @@
 OAuth2
 ======
 
+.. module:: ferris3.oauth2
+
 Ferris provides utilities for interacting with Google's implementation of `OAuth2 Service Account Flow <https://developers.google.com/accounts/docs/OAuth2ServiceAccount>`_ as well as obtaining the access token from the active endpoints request. This makes it easy to obtain account credentials and access Google APIs.
 
 This documentation assumes you have an understanding of OAuth2. If you'd like to read more on the subject of OAuth2 and how Google uses it please read `Google's documentation <https://developers.google.com/accounts/docs/OAuth2>`_.
-
-.. module:: ferris3.oauth2
 
 
 Endpoints Credentials

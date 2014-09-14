@@ -12,3 +12,5 @@ The user's guide provides both API and usage documentation for all of Ferris' fe
    caching
    oauth2
    google_apis
+   handlers
+   templates

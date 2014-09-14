@@ -57,7 +57,12 @@ You can now use this endpoint by name (the name field in the yaml file) when def
 Creating Services
 -----------------
 
-Services can be added to an endpoint using :func:`auto_service`::
+Services are defined in the ``app`` directory using the convention ``app/[module]/[module]_service.py``. By following the convention ferris will automatically discover and wire your services.
+
+.. warning::
+    If you do not follow the conventions then ferris can not automatically discover your service modules. See :doc:`discovery` for more details.
+
+Once the service file is created, services can be added to an endpoint using :func:`auto_service`::
 
     import ferris3
 
