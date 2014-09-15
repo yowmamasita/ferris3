@@ -3,7 +3,7 @@ Search
 
 .. module:: ferris3.search
 
-Ferris provides some higher-level utilities on top of `App Engine's Search API <https://developers.google.com/appengine/docs/python/search/>`__. Notably ferris offers automatic translation of models into search documents via :func:`index_entity` and the :cls:`Searchable` behavior as well as a highler-level query interface via :func:`search`.
+Ferris provides some higher-level utilities on top of `App Engine's Search API <https://developers.google.com/appengine/docs/python/search/>`__. Notably ferris offers automatic translation of models into search documents via :func:`index_entity` and the :class:`Searchable` behavior as well as a highler-level query interface via :func:`search`.
 
 
 Indexing models
