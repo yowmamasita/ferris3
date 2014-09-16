@@ -19,7 +19,7 @@ def add(config_or_file, default=False):
     Add an endpoint to the registry.
 
     ``config_or_file`` can be the path to a yaml definition file or a dictionary of arguments to pass to
-    ``endpoints.api``. See also Google's documentation on `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_the_api_endpointsapi>`_.
+    ``endpoints.api``. See also Google's documentation on `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_the_api_endpointsapi>`__.
 
     Tpyically, this is called in an application's ``main.py`` before any services are loaded.
 
@@ -248,12 +248,14 @@ def annotations_to_resource_container(annotations, defaults, RequestMessage):
     if annotations:
         for n, (name, type) in enumerate(annotations.iteritems(), 1):
             required = True if name not in defaults else False
+            default = defaults[name] if not required else None
 
             if type == str:
-                args[name] = messages.StringField(n, required=required)
+                args[name] = messages.StringField(n, required=required, default=default)
             if type == int:
-                args[name] = messages.IntegerField(n, required=required)
-            #TODO: more types
+                args[name] = messages.IntegerField(n, required=required, default=default)
+            if type == bool:
+                args[name] = messages.BooleanField(n, required=required, default=default)
 
     if args:
         return endpoints.ResourceContainer(RequestMessage, **args), args.keys()

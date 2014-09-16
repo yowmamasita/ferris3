@@ -5,7 +5,7 @@ VERSION = '3.0.0-alpha2'
 setup(
     name="Ferris",
     version=VERSION,
-    author='Jon Parrott',
+    author='Jon Parrott / Cloud Sherpas',
     author_email='jjramone13@gmail.com',
     maintainer='Jon Parrott / Cloud Sherpas',
     maintainer_email='jonathan.parrott@cloudsherpas.com',

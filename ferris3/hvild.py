@@ -77,6 +77,13 @@ def insert_impl(Model, Message, request):
 
 
 def list(Model, Message=None, ListMessage=None, query=None, name='list'):
+    """
+    Implements a very simple list method for the given model.
+
+    .. warning:: No limiting logic is applied to the query so this will attempt to get all results.
+        It is almost always preferable to use :func:`paginated_list`.
+
+    """
     if not Message:
         Message = ferris3.model_message(Model)
 
@@ -97,6 +104,9 @@ def list(Model, Message=None, ListMessage=None, query=None, name='list'):
 
 
 def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, name='paginated_list'):
+    """
+    Similar to :func:`list` but returns results in pages of ``limit`` size.
+    """
     if not Message:
         Message = ferris3.model_message(Model)
 
@@ -117,6 +127,10 @@ def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, 
 
 
 def searchable_list(Model=None, Message=None, ListMessage=None, limit=50, index=None, name='search'):
+    """
+    Implements a search method by using the :mod:`~ferris3.search` module. This method assumes you are
+    using the common use case of indexing datastore entities and does not work for generic searches.
+    """
     if not Message:
         Message = ferris3.model_message(Model)
 
@@ -134,6 +148,9 @@ def searchable_list(Model=None, Message=None, ListMessage=None, limit=50, index=
 
 
 def get(Model, Message=None, name='get'):
+    """
+    Implements a straightfoward get method by using the urlsafe version of the entity's key.
+    """
     if not Message:
         Message = ferris3.model_message(Model)
 
@@ -145,6 +162,9 @@ def get(Model, Message=None, name='get'):
 
 
 def delete(Model, name='delete'):
+    """
+    Implements a straightfoward delete method by using the urlsafe version of the entity's key.
+    """
 
     @ferris3.auto_method(name=name, http_method='DELETE')
     def inner(self, request, item_key=(str,)):
@@ -155,6 +175,9 @@ def delete(Model, name='delete'):
 
 
 def insert(Model, Message=None, name='insert'):
+    """
+    Implements the insert method. The request fields are determined by the ``Message`` parameter.
+    """
     if not Message:
         Message = ferris3.model_message(Model)
 
@@ -166,6 +189,10 @@ def insert(Model, Message=None, name='insert'):
 
 
 def update(Model, Message=None, name='update'):
+    """
+    Implements the update method. The item updated is determined by the urlsafe key of that item.
+    The request fields are determined by the ``Message`` parameter.
+    """
     if not Message:
         Message = ferris3.model_message(Model)
 

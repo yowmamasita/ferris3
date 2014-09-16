@@ -1,7 +1,7 @@
 Endpoints
 =========
 
-Ferris provides some utilities on top of Google Cloud Endpoints to make it easier to define an expose endpoints.
+Ferris provides some utilities on top of `Google Cloud Endpoints <https://developers.google.com/appengine/docs/python/endpoints/>`__ to make it easier to define an expose endpoints.
 
 .. contents::
     :local:
@@ -57,7 +57,12 @@ You can now use this endpoint by name (the name field in the yaml file) when def
 Creating Services
 -----------------
 
-Services can be added to an endpoint using :func:`auto_service`::
+Services are defined in the ``app`` directory using the convention ``app/[module]/[module]_service.py``. By following the convention ferris will automatically discover and wire your services.
+
+.. warning::
+    If you do not follow the conventions then ferris can not automatically discover your service modules. See :doc:`discovery` for more details.
+
+Once the service file is created, services can be added to an endpoint using :func:`auto_service`::
 
     import ferris3
 
@@ -76,7 +81,7 @@ Services can be added to an endpoint using :func:`auto_service`::
     class ImagesApi(ferris3.Service):
         ...
 
-If you need more control, the endpoints loaded by Ferris are turned into normal Google Cloud Endpoints API classes. You may follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_::
+If you need more control, the endpoints loaded by Ferris are turned into normal Google Cloud Endpoints API classes. You may follow the same patterns described in Google's documentation on `implementing a multi-class API <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`__::
 
     import ferris3
 
@@ -92,7 +97,7 @@ The default endpoint is available via :func:`default` and you can get a particul
 Exposing Methods
 ----------------
 
-A service doesn't do much good with methods. The :func:`auto_method` decorator helps expose class methods as API methods.
+A service doesn't do much good without some methods. The :func:`auto_method` decorator helps expose class methods as API methods.
 
 The most basic example::
 
@@ -132,10 +137,13 @@ In order to return some data to the client we'll need to define and use a messag
             return HelloMessage(greeting="Hello!")
 
 
+For more details on creating messages see :doc:`messages`.
+
+
 Defining Parameters
 *******************
 
-Sometimes we want a method to take parameters. When using pure Google Cloud Endpoints you'd have to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_, but Ferris uses a technique called annotation to automatically handle this for you::
+Sometimes we want a method to take parameters. When using pure Google Cloud Endpoints you'd have to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`__, but Ferris uses a technique called annotation to automatically handle this for you::
 
     @ferris3.auto_method(returns=HelloMessage)
     def hello(self, request, name=(str, 'Unknown')):
@@ -187,7 +195,7 @@ Of course, you can combine a request message with parameters::
 
 
 .. warning::
-    When combining request messages with request parameters, all names must be unique. You may not specify duplicate names. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
+    When combining request messages with request parameters the field and parameter names must be unique. For example, you can't have a message with the field ``name`` and also a parameter called ``name``. 
 
 
 API Reference

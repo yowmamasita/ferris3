@@ -24,5 +24,5 @@ def render(name, context=None):
     template = env.get_or_select_template(name)
     context = context if context else {}
 
-    result = template.render(context, context=context)
+    result = template.render(context)
     return result
