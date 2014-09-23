@@ -7,7 +7,7 @@ def send(recipient, subject, body, sender=None, reply_to=None, **kwargs):
     """
     Sends an html email to ``recipient`` with the given ``subject`` and ``body``.
 
-    If sender is none, it's automatically set to ``app_config['email_sender']``,
+    If sender is none, it's automatically set to ``settings['email_sender']``,
     If the setting is not configured, then the default ``noreply@[appid].appspotmail.com`` is used.
 
     Any additionally arguments are passed to ``mail.send_mail``, such as headers.
