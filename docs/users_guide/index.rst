@@ -6,16 +6,17 @@ The user's guide provides both API and usage documentation for all of Ferris' fe
 .. toctree::
    :maxdepth: 2
 
-   endpoints
-   datastore
-   messages
-   hvild
    caching
-   oauth2
-   google_apis
-   search
-   handlers
-   templates
-   static_files
+   datastore
    discovery
+   endpoints
+   google_apis
+   handlers
+   hvild
+   mail
+   messages
+   oauth2
+   search
    settings
+   static_files
+   templates

@@ -7,11 +7,12 @@ def send(recipient, subject, body, sender=None, reply_to=None, **kwargs):
     """
     Sends an html email to ``recipient`` with the given ``subject`` and ``body``.
 
-    If sender is none, it's automatically set to ``app_config['email']['sender']``.
+    If sender is none, it's automatically set to ``app_config['email_sender']``,
+    If the setting is not configured, then the default ``noreply@[appid].appspotmail.com`` is used.
 
     Any additionally arguments are passed to ``mail.send_mail``, such as headers.
     """
-    sender = sender if sender else settings.get('email')['sender']
+    sender = sender if sender else settings.get('email_sender', None)
     if not sender:
         sender = "noreply@%s.appspotmail.com" % app_identity.get_application_id()
         logging.info("No sender configured, using the default one: %s" % sender)
@@ -30,21 +31,21 @@ def send(recipient, subject, body, sender=None, reply_to=None, **kwargs):
 
 def send_template(recipient, subject, template_name, context=None, theme=None, **kwargs):
     """
-    Renders a template and sends an email in the same way as :func:`send`.
-    templates should be stored in ``/templates/email/<template>.html``.
+    Renders a template using :func:`~ferris3.template.render` and sends an email
+    in the same way as :func:`send`.
 
     For example::
 
         mail.send_template(
             recipient='jondoe@example.com',
             subject='A Test Email',
-            template_name='test',
+            template_name='app/email/test.html',
             context={
                 'name': 'George'
             }
         )
 
-    Would render the template ``/templates/email/test.html`` and email the rendered html.
+    Would render the template ``app/email/test.html`` and email the rendered html.
     """
     name = ('email/' + template_name + '.html', template)
     context = context if context else {}

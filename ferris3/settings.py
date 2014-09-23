@@ -2,6 +2,7 @@ from __future__ import absolute_import
 import logging
 
 _defaults = {}
+_sentinel = object()
 
 
 class ConfigurationError(Exception):
@@ -60,14 +61,14 @@ def set(key, value):
     _defaults[key] = value
 
 
-def get(key, default=None):
+def get(key, default=_sentinel):
     """
     Returns the setting at key, if available, raises an ConfigurationError if default is none, otherwise
     returns the default
     """
     _settings = all()
     if key not in _settings:
-        if default is None:
+        if default is _sentinel:
             raise ConfigurationError("Missing setting %s" % key)
         else:
             return default
