@@ -95,18 +95,19 @@ def apiclient_retry_policy(exception):
         error = json.loads(exception.content)
         error = error.get('error', error)
         code = error.get('code')
+        message = error.get('message)')
         reason = error.get('errors', [{}])[0].get('reason')
+        if code in (500, 501, 502, 503, 504):
+            logging.info("Google returned internal error %s: %s, retrying..." % (code, reason))
+            return True
         if code == 403 and reason in ('rateLimitExceeded', 'userRateLimitExceeded'):
             logging.info("Rate limit exceeded, retrying...")
             return True
         elif code == 403 and reason in ('dailyLimitExceeded',):
-            logging.error("Uh oh- daily quota limit exceeded!")
+            logging.error("Uh oh- daily quota limit exceeded! Not retrying")
             return False
-        elif code == 403:
-            logging.info("I think the rate limit was exceeded (reason was %s), so retrying..." % reason)
-            return True
         else:
-            logging.info("Non-rate limit API error %s raised" % error.get('message'))
+            logging.info("API error %s: %s: %s raised. Not retrying" % (code, reason, message))
 
     except ValueError:
         logging.error("Failed to parse json from exception: %s" % exception.content)
