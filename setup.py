@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '3.0.0-alpha2'
+VERSION = '3.0.0-alpha3'
 
 setup(
     name="Ferris",
@@ -19,5 +19,7 @@ setup(
     ],
     packages=['ferris3'],
     install_requires=[
+        'google_api_client_python',
+        'protopigeon'
     ],
 )
