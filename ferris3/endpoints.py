@@ -252,10 +252,14 @@ def annotations_to_resource_container(annotations, defaults, RequestMessage):
 
             if type == str:
                 args[name] = messages.StringField(n, required=required, default=default)
-            if type == int:
+            elif type == int:
                 args[name] = messages.IntegerField(n, required=required, default=default)
-            if type == bool:
+            elif type == bool:
                 args[name] = messages.BooleanField(n, required=required, default=default)
+            elif type == float:
+                args[name] = messages.FloatField(n, required=required, default=default)
+            else:
+                raise ValueError("Unsupported endpoints argument type: %s" % type)
 
     if args:
         return endpoints.ResourceContainer(RequestMessage, **args), args.keys()
