@@ -1,7 +1,7 @@
 Tutorial
 =================
 
-This tutorial will walk you through creating a simple API. If you haven't yet, be sure to read through the :doc:`introduction` and :doc:`getting_started` section. This assumes you've already created a new project.
+This tutorial will walk you through creating a simple API. If you haven't yet, be sure to read through the :doc:`introduction` and :doc:`getting_started` section. This assumes you have already created a new project- if not, head back to :doc:`getting_started` for instructions.
 
 
 A Simple “Posts” Service
@@ -15,7 +15,7 @@ First we will create a ``posts`` folder inside of the ``app`` folder.
     For a refresher on how the new folder structure works, take a look at the :doc:`introduction` again. Also recall that python requires all folders you create in your project will need an empty ``__init__.py`` file inside of it.
     (Note: when Google allows us to use Python 3, we’ll no longer have to do this, c'mon, Google!)
 
-Now we'll create the service file. The convention here is to use ``[Service Name]_service.py``, or in this case ``posts_service.py``. By following the convention, Ferris' discovery utility will find this file and automatically load it for us. Inside this file we will define all the different methods we’d like our service to contain.
+Next we'll create the service file. The convention here is to use ``[service_name]_service.py``, or in this case ``posts_service.py``. By following the convention, Ferris' discovery utility will find this file and automatically load it for us. Inside this file we will define all the different methods we’d like our service to contain.
 
 Before we start making methods to interact with Posts, however, we’ll need an actual Post model. We can accomplish this in two ways:
 
@@ -70,6 +70,7 @@ Now we get to ``hvild``. Hvild is one of the more magical parts of Ferris and it
     delete = hvild.delete(Post)
     insert = hvild.insert(Post)
     update = hvild.update(Post)
+
 
 That’s it, just set your methods equal to their hvild counterparts and pass in the model that the methods manipulate (in this case ``Post``).
 

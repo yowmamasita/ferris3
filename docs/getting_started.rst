@@ -25,7 +25,7 @@ If you already have node, run::
     npm install -g yo generator-ferris
 
 .. tip::
-    Sometimes setting up an environment can be weird and difficult. We feel your pain. If you run into trouble feel free to reach out to us on the `mailing list <https://groups.google.com/forum/?fromgroups#!forum/ferris-framework>`_. We generally recommend Ubuntu for development as setting up the Google Cloud SDK on Linux is extremely easy. We've even written a `script to setup a complete environment <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap>`_ on Ubuntu. You can also use vagrant to run a headless Ubuntu VM on Windows or OSX; we even have an example `Vagrantfile <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap/src/master/Vagrantfile>`_ to get you going. 
+    Sometimes setting up an environment can be weird and difficult. We feel your pain. If you run into trouble feel free to reach out to us on the `mailing list <https://groups.google.com/forum/?fromgroups#!forum/ferris-framework>`_. We generally recommend Ubuntu for development as setting up the Google Cloud SDK on Linux is extremely easy. We've written a `script to setup a complete environment <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap>`_ on Ubuntu. You can also use vagrant to run a headless Ubuntu VM on Windows or OSX; we also have an example `Vagrantfile <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap/src/master/Vagrantfile>`_ to get you going. 
 
 
 Starting a new project
@@ -37,9 +37,9 @@ As mentioned above, the easiest method of starting a new project is using yeoman
     cd my-ferris-project
     yo ferris
 
-Yeoman will ask you a few questions (the defaults are usually fine) and generate a project for you.
+Yeoman will ask you a few questions and generate a project for you.
 
-Alternatively, if you do not wish to use Yeoman you can clone the `Ferris Boilerplate <TODO>`_ repository.
+Alternatively, if you do not wish to use Yeoman you can clone the `Ferris 3 Skeleton <https://github.com/jonparrott/Ferris-3-Skeleton>`_ repository.
 
 
 The App Engine Development Server
