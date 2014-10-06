@@ -158,7 +158,7 @@ def key(s):
         return s
     if isinstance(s, types.StringTypes):
         return ndb.Key(urlsafe=s)
-    return None
+    raise ValueError("Can no coerce value %s into a key." % s)
 
 
 def get(item):

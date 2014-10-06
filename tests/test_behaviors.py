@@ -28,7 +28,7 @@ class TestBehavior(Behavior):
 
 class BehaviorTestModel(Model):
     class Meta:
-        behaviors = (TestBehavior,)
+        behaviors = (TestBehavior, Behavior)
 
     string_one = ndb.StringProperty()
     string_two = ndb.StringProperty()
