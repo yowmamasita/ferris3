@@ -153,7 +153,7 @@ def index_entity(instance, index, only=None, exclude=None, extra_converters=None
     except Exception as e:
         logging.error("Adding model %s instance %s to the full-text index failed" % (instance.key.kind(), instance.key.id()))
         logging.error("Search API error: %s" % e)
-        logging.debug([(x.name, x.value) for x in fields])
+        raise
 
 
 def unindex_entity(instance_or_key, index=None):
