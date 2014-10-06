@@ -1,5 +1,8 @@
 import protopigeon
 
+model_message = protopigeon.model_message
+list_message = protopigeon.list_message
+
 
 def serialize(MessageType, entity):
     return protopigeon.to_message(entity, MessageType)
