@@ -20,3 +20,4 @@ The user's guide provides both API and usage documentation for all of Ferris' fe
    settings
    static_files
    templates
+   testing
