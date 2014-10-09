@@ -209,6 +209,8 @@ def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_me
 
         RequestMessageOrContainer, request_args = annotations_to_resource_container(f_annotations, f_args_to_defaults, RequestMessage)
 
+        sanity_check_request_message(func_name, RequestMessageOrContainer)
+
         ep_dec = endpoints.method(
             RequestMessageOrContainer,
             ResponseMessage,
@@ -265,3 +267,14 @@ def annotations_to_resource_container(annotations, defaults, RequestMessage):
         return endpoints.ResourceContainer(RequestMessage, **args), args.keys()
 
     return RequestMessage, args.keys()
+
+
+def sanity_check_request_message(method, message):
+    if hasattr(message, 'combined_message_class'):
+        message = message.combined_message_class
+    field_names = set([x.name for x in message.all_fields()])
+    reserved_fields = set(['access_token', 'callback', 'fields', 'key', 'printPrint', 'quotaUser', 'userIp'])
+    bad_fields = field_names & reserved_fields
+
+    if bad_fields:
+        raise ValueError("Request type %s for method %s contains reserved field names: %s" % (message, method, ', '.join(bad_fields)))

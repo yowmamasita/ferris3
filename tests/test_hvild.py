@@ -57,7 +57,7 @@ class HvildTest(AppEngineTest):
 
         result = invoke(service_insert, content=42)
 
-        assert result.key.urlsafe
+        assert result.datastore_key.urlsafe
         assert result.content == 42
         assert SimpleModel.query().get().content == 42
 
@@ -67,7 +67,7 @@ class HvildTest(AppEngineTest):
 
         result = invoke(service_get, item_key=key.urlsafe())
 
-        assert result.key.urlsafe == key.urlsafe()
+        assert result.datastore_key.urlsafe == key.urlsafe()
         assert result.content == 42
 
     def test_delete(self):
@@ -84,6 +84,6 @@ class HvildTest(AppEngineTest):
 
         result = invoke(service_update, item_key=key.urlsafe(), content=13)
 
-        assert result.key.urlsafe == key.urlsafe()
+        assert result.datastore_key.urlsafe == key.urlsafe()
         assert result.content == 13
         assert SimpleModel.query().get().content == 13
