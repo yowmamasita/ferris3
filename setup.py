@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '3.0.0-alpha5'
+VERSION = '3.0.0-alpha6'
 
 setup(
     name="Ferris",
