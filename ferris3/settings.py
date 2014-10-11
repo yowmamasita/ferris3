@@ -3,6 +3,7 @@ import logging
 
 _defaults = {}
 _sentinel = object()
+_loaded = False
 
 
 class ConfigurationError(Exception):
@@ -14,6 +15,7 @@ def load(refresh=False):
     Executed when the project is created and loads the settings from app/settings.py
     """
     global _defaults
+    global _loaded
 
     if _defaults and not refresh:
         return
@@ -33,6 +35,8 @@ def load(refresh=False):
 
     defaults(appdefaults)
 
+    _loaded = True
+
 
 def defaults(dict=None):
     """
@@ -51,6 +55,8 @@ def all():
     """
     Returns the entire settings registry
     """
+    if not _loaded:
+        load()
     settings = {}
     settings.update(_defaults)
     return settings
