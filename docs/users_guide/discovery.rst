@@ -38,16 +38,17 @@ Using discovery
 
 The generator and the boilerplate repository both contain a working ``main.py`` for the application, however, if you find yourself wanting to modify or create one manually this information could be helpful.
 
-To discover all endpoint services in the application use :func:`discover_api_services`::
-
-    import endpoints as cloud_endpoints
-    from ferris3.discovery import discover_api_services
-    from ferris3 import endpoints
+Before calling discovery you should make sure all endpoint configuration files are loaded. Typically this is done by importing a ``endpoints_config.py`` within ``appengine_config.py``. The ``endpoints_config.py`` should be something like::
 
     # Load the default endpoint or any other endpoints used by the application here
     # It's important to do this before discovery because if the endpoint isn't available
     # the classes will throw and error when trying to register.
     endpoints.add('app/default-api.yaml', default=True)
+
+To discover all endpoint services in the application use :func:`discover_api_services`::
+
+    import endpoints as cloud_endpoints
+    from ferris3.discovery import discover_api_services
 
     API_CLASSES = discover_api_services()
     API_APPLICATION = cloud_endpoints.api_server(API_CLASSES)

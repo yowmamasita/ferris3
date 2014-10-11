@@ -47,7 +47,7 @@ Here's an annotated sample:
     - 462711127220-1mr3uha1ukgicv4s0ebvo26bulkpb4k1.apps.googleusercontent.com
 
 
-Once you've defined your endpoint you need to instruct Ferris to load it and make it available. You'll need to modify ``main.py`` and add:
+Once you've defined your endpoint you need to instruct Ferris to load it and make it available. You'll need to modify ``endpoints_config.py`` and add:
     
     endpoints.add('app/my-new-endpoint.yaml')
 

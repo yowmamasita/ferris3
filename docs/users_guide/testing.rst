@@ -90,3 +90,46 @@ Here's an example of writing a test case::
 
             assert "Pickles" in r
 
+
+Writing tests for cloud endpoints services
+------------------------------------------
+
+:class:`EndpointsTest` makes it easier to test endpoints services. It handles setting up the proper environment as well as configuring a ``webtest`` instance.
+
+.. autoclass:: EndpointsTest
+
+To add services to be tested use :meth:`add_service`.
+
+.. automethod:: EndpointsTest.add_service
+
+To login a user so that ``endpoints.get_current_user`` returns that user, use :meth:`login`.
+
+.. automethod:: EndpointsTest.login
+
+To invoke a service's method, use :meth:`invoke`. Note that you must use ``ClassName.method_name``.
+
+.. automethod :: EndpointsTest.invoke
+
+A complete example::
+
+    from ferrisnose import EndpointsTest
+    from app.guestbook import guestbook_service
+
+
+    class TestGuestbook(EndpointsTest):
+
+        def test_api(self):
+            self.login("test@example.com")
+            self.add_service(guestbook_service.GuestbookService)
+
+            resp = self.invoke('GuestbookService.insert', {
+                "content": "hello!"
+            })
+
+            assert resp['content'] == 'hello!'
+            assert resp['author']['email'] == 'test@example.com'
+
+            resp = self.invoke('GuestbookService.list')
+
+            assert len(resp['items']) == 1
+            assert resp['items'][0]['content'] == 'hello!'
