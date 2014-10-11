@@ -12,7 +12,10 @@ def send(recipient, subject, body, sender=None, reply_to=None, **kwargs):
 
     Any additionally arguments are passed to ``mail.send_mail``, such as headers.
     """
-    sender = sender if sender else settings.get('email_sender', None)
+    try:
+        sender = sender if sender else settings.get('email_sender', None)
+    except settings.ConfigurationError:
+        sender = None
     if not sender:
         sender = "noreply@%s.appspotmail.com" % app_identity.get_application_id()
         logging.info("No sender configured, using the default one: %s" % sender)
