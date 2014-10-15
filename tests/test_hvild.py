@@ -36,6 +36,7 @@ class HvildTest(AppEngineTest):
         service_paginated_list = hvild.paginated_list(SimpleModel, limit=10)
         result = invoke(service_paginated_list)
         assert len(result.items) == 10
+        assert result.nextPageToken
 
         service_paginated_list_query = hvild.paginated_list(SimpleModel, limit=10, query=lambda: SimpleModel.query())
         result = invoke(service_paginated_list_query)
@@ -57,7 +58,7 @@ class HvildTest(AppEngineTest):
 
         result = invoke(service_insert, content=42)
 
-        assert result.itemId
+        assert result.id
         assert result.content == 42
         assert SimpleModel.query().get().content == 42
 
@@ -65,16 +66,16 @@ class HvildTest(AppEngineTest):
         key = SimpleModel(content=42).put()
         service_get = hvild.get(SimpleModel)
 
-        result = invoke(service_get, item_key=key.urlsafe())
+        result = invoke(service_get, itemId=key.urlsafe())
 
-        assert result.itemId == key.urlsafe()
+        assert result.id == key.urlsafe()
         assert result.content == 42
 
     def test_delete(self):
         key = SimpleModel(content=42).put()
         service_delete = hvild.delete(SimpleModel)
 
-        invoke(service_delete, item_key=key.urlsafe())
+        invoke(service_delete, itemId=key.urlsafe())
 
         assert SimpleModel.query().count() == 0
 
@@ -82,8 +83,8 @@ class HvildTest(AppEngineTest):
         key = SimpleModel(content=42).put()
         service_update = hvild.update(SimpleModel)
 
-        result = invoke(service_update, item_key=key.urlsafe(), content=13)
+        result = invoke(service_update, itemId=key.urlsafe(), content=13)
 
-        assert result.itemId == key.urlsafe()
+        assert result.id == key.urlsafe()
         assert result.content == 13
         assert SimpleModel.query().get().content == 13

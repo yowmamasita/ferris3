@@ -12,28 +12,28 @@ def list_impl(ListMessage, query):
         .value()
 
 
-def paginated_list_impl(ListMessage, query, limit, page_token):
+def paginated_list_impl(ListMessage, query, limit, pageToken):
     return ferris3.ToolChain(query) \
-        .ndb.paginate(limit=limit, page_token=page_token) \
+        .ndb.paginate(limit=limit, page_token=pageToken) \
         .messages.serialize_list(ListMessage) \
         .value()
 
 
-def searchable_list_impl(ListMessage, index, query, limit, sort, page_token):
+def searchable_list_impl(ListMessage, index, query, limit, sort, pageToken):
     def check_for_search_errors(data):
         if data.error:
             raise ferris3.BadRequestException("Search error: %s" % data.error)
 
     return ferris3.ToolChain(query) \
-        .search.search(index, sort=sort, limit=limit, page_token=page_token) \
+        .search.search(index, sort=sort, limit=limit, page_token=pageToken) \
         .tap(check_for_search_errors) \
         .search.to_entities() \
         .messages.serialize_list(ListMessage) \
         .value()
 
 
-def get_impl(Model, Message, item_key):
-    return ferris3.ToolChain(item_key) \
+def get_impl(Model, Message, itemId):
+    return ferris3.ToolChain(itemId) \
         .ndb.get() \
         .raise_if(None, ferris3.NotFoundException()) \
         .ndb.check_kind(Model) \
@@ -41,16 +41,16 @@ def get_impl(Model, Message, item_key):
         .value()
 
 
-def delete_impl(Model, item_key):
-    return ferris3.ToolChain(item_key) \
+def delete_impl(Model, itemId):
+    return ferris3.ToolChain(itemId) \
         .ndb.key() \
         .ndb.check_kind(Model) \
         .ndb.delete() \
         .value()
 
 
-def update_impl(Model, Message, item_key, request):
-    item = ferris3.ToolChain(item_key) \
+def update_impl(Model, Message, itemId, request):
+    item = ferris3.ToolChain(itemId) \
         .ndb.get() \
         .raise_if(None, ferris3.NotFoundException()) \
         .ndb.check_kind(Model) \
@@ -120,8 +120,8 @@ def paginated_list(Model, Message=None, ListMessage=None, query=None, limit=50, 
         query = query()
 
     @ferris3.auto_method(returns=ListMessage, name=name)
-    def inner(self, request, page_token=(str, '')):
-        return paginated_list_impl(ListMessage, query, limit, page_token)
+    def inner(self, request, pageToken=(str, '')):
+        return paginated_list_impl(ListMessage, query, limit, pageToken)
 
     return inner
 
@@ -141,8 +141,8 @@ def searchable_list(Model=None, Message=None, ListMessage=None, limit=50, index=
         index = ferris3.search.index_for(Model)
 
     @ferris3.auto_method(returns=ListMessage, name=name)
-    def inner(self, request, query=(str, ''), sort=(str, None), page_token=(str, '')):
-        return searchable_list_impl(ListMessage, index, query, limit, sort, page_token)
+    def inner(self, request, query=(str, ''), sort=(str, None), pageToken=(str, '')):
+        return searchable_list_impl(ListMessage, index, query, limit, sort, pageToken)
 
     return inner
 
@@ -155,8 +155,8 @@ def get(Model, Message=None, name='get'):
         Message = ferris3.model_message(Model)
 
     @ferris3.auto_method(returns=Message, name=name)
-    def inner(self, request, item_key=(str,)):
-        return get_impl(Model, Message, item_key)
+    def inner(self, request, itemId=(str,)):
+        return get_impl(Model, Message, itemId)
 
     return inner
 
@@ -167,8 +167,8 @@ def delete(Model, name='delete'):
     """
 
     @ferris3.auto_method(name=name, http_method='DELETE')
-    def inner(self, request, item_key=(str,)):
-        delete_impl(Model, item_key)
+    def inner(self, request, itemId=(str,)):
+        delete_impl(Model, itemId)
         return None
 
     return inner
@@ -197,7 +197,7 @@ def update(Model, Message=None, name='update'):
         Message = ferris3.model_message(Model)
 
     @ferris3.auto_method(returns=Message, name=name, http_method='POST')
-    def inner(self, request=(Message,), item_key=(str,)):
-        return update_impl(Model, Message, item_key, request)
+    def inner(self, request=(Message,), itemId=(str,)):
+        return update_impl(Model, Message, itemId, request)
 
     return inner
