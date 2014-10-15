@@ -35,4 +35,4 @@ class MessagesTest(AppEngineTest):
         message = ferris3.messages.serialize_list(SimpleModelMessageCollection, results)
 
         assert len(message.items) == 3
-        assert message.next_page_token == 'meep'
+        assert message.nextPageToken == 'meep'

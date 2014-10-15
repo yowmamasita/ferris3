@@ -4,12 +4,12 @@ model_message = protopigeon.model_message
 list_message = protopigeon.list_message
 
 
-def serialize(MessageType, entity):
-    return protopigeon.to_message(entity, MessageType)
+def serialize(MessageType, entity, **kwargs):
+    return protopigeon.to_message(entity, MessageType, **kwargs)
 
 
-def deserialize(Model, message):
-    return protopigeon.to_entity(message, Model)
+def deserialize(Model, message, **kwargs):
+    return protopigeon.to_entity(message, Model, **kwargs)
 
 
 def serialize_list(ListMessageType, entities):
@@ -26,6 +26,6 @@ def serialize_list(ListMessageType, entities):
 
     message = ListMessageType()
     message.items = [serialize(MessageType, x) for x in entities]
-    message.next_page_token = next_page_token
+    message.nextPageToken = next_page_token
 
     return message
