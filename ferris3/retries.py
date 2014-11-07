@@ -9,11 +9,16 @@ def retries(max_tries, should_retry, delay=1, backoff=2):
     a function that may fail, this decorator can catch the exception and retry at
     exponentially increasing intervals until the number of retries is exhausted.
 
-    The should_retry parameter should be a function that takes and exception as an argument
+    The should_retry parameter should be a function that takes an exception as an argument
     and returns True if the function should be retried or False to permanently fail.
 
     This is extremely useful when working with external APIs. There is a shortcut
     decorator for working with Google APIs, see :func:`google_api_retries`.
+    
+    Example::
+    
+        @retries(2, lambda x: isinstance(x, ValueError))
+
     """
     def dec(func):
         functools.wraps(func)
