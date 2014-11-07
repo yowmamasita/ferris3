@@ -95,7 +95,7 @@ def apiclient_retry_policy(exception):
         error = json.loads(exception.content)
         error = error.get('error', error)
         code = error.get('code')
-        message = error.get('message)')
+        message = error.get('message')
         reason = error.get('errors', [{}])[0].get('reason')
         if code in (500, 501, 502, 503, 504):
             logging.info("Google returned internal error %s: %s, retrying..." % (code, reason))
