@@ -159,7 +159,7 @@ def auto_service(cls=None, endpoint=None, **kwargs):
     return auto_class_decr
 
 
-def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='POST', **kwargs):
+def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='POST', path=None, **kwargs):
     """
     Uses introspection to automatically configure and expose an API method. This is sugar around `endpoints.method <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_an_api_method_endpointsmethod>`_.
 
@@ -195,6 +195,7 @@ def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_me
     """
     def auto_api_decr(func):
         func_name = func.__name__ if not name else name
+        path_name = func_name if not path else path
         func = annotated(returns=returns)(func)
         f_annotations = func.__annotations__
         f_args, f_varargs, f_kwargs, f_defaults = inspect.getargspec(func)
@@ -216,7 +217,7 @@ def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_me
             ResponseMessage,
             http_method=http_method,
             name=func_name,
-            path=func_name,  #TODO: include required params,
+            path=path_name,
             **kwargs
         )
 
