@@ -69,6 +69,13 @@ class EndpointsTest(AppEngineTest):
         assert isinstance(void_with_args.remote.request_type.int_arg, messages.IntegerField)
         assert void_with_args.remote.response_type == VoidMessage
 
+        @endpoints.auto_method(path='{str_arg}')
+        def void_with_path_args(self, request, str_arg=(str,), default_arg=(str, 'def')):
+            assert default_arg == 'def'
+
+        assert isinstance(void_with_path_args.remote.request_type.str_arg, messages.StringField)
+        assert void_with_path_args.remote.response_type == VoidMessage
+
         def invalid_args(self, request, dict_arg=(dict,)):
             pass
 
