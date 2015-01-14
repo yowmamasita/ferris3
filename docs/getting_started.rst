@@ -22,7 +22,7 @@ If you want to take advantage of the easiest way of using Ferris you'll need:
 
 If you already have node, run::
 
-    npm install -g yo generator-ferris
+    npm install -g yo generator-ferris3
 
 .. tip::
     Sometimes setting up an environment can be weird and difficult. We feel your pain. If you run into trouble feel free to reach out to us on the `mailing list <https://groups.google.com/forum/?fromgroups#!forum/ferris-framework>`_. We generally recommend Ubuntu for development as setting up the Google Cloud SDK on Linux is extremely easy. We've written a `script to setup a complete environment <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap>`_ on Ubuntu. You can also use vagrant to run a headless Ubuntu VM on Windows or OSX; we also have an example `Vagrantfile <https://bitbucket.org/cloudsherpas/ubuntu-environment-bootstrap/src/master/Vagrantfile>`_ to get you going. 
