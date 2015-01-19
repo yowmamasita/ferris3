@@ -24,6 +24,8 @@ As your application grows you may wish to add additional frontends such as Andro
 
 At Cloud Sherpas, we use a AngularJS as our frontend techology of choice. We've created a lot of tools around using AngularJS along with Google Cloud Endpoints. Our toolkit is open-source and is called `Eydís <http://eydistoolkit.org>`_.
 
+If you're interested in using Ferris' utilities within an existing framework, see :doc:`ferris_as_a_library`.
+
 
 Convention, Configuration, and Structure
 ----------------------------------------
