@@ -166,7 +166,7 @@ def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_me
     The ``returns`` argument is the response message type and is by default ``message_types.VoidMessage`` (an empty response).
     The ``name`` argument is optional and if left out will be set to the name of the function.
     The ``http_method`` argument is ``POST`` by default and can be changed if desired. Note that ``GET`` methods can not accept a request message.
-    The remaining ``kwargs`` are passed direction to ``endpoints.method``.
+    The remaining ``kwargs`` are passed directly to ``endpoints.method``.
 
     This decorator uses introspection along with annotation to determine the request message type as well as any query string parameters for the method. This saves you the trouble of having to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_.
 
