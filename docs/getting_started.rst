@@ -35,7 +35,7 @@ As mentioned above, the easiest method of starting a new project is using yeoman
 
     mkdir my-ferris-project
     cd my-ferris-project
-    yo ferris
+    yo ferris3
 
 Yeoman will ask you a few questions and generate a project for you.
 
