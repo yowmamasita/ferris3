@@ -19,9 +19,9 @@ def add(config_or_file, default=False):
     Add an endpoint to the registry.
 
     ``config_or_file`` can be the path to a yaml definition file or a dictionary of arguments to pass to
-    ``endpoints.api``. See also Google's documentation on `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_the_api_endpointsapi>`__.
+    ``endpoints.api``. See also Google's documentation on `endpoints.api <https://cloud.google.com/appengine/docs/python/endpoints/create_api#defining_the_api_endpointsapi>`__.
 
-    Tpyically, this is called in an application's ``main.py`` before any services are loaded.
+    Typically, this is called in an application's ``main.py`` before any services are loaded.
 
     Examples::
 
@@ -51,7 +51,7 @@ def get(name=None):
     """
     Get an endpoint by name from the registry.
 
-    The value returned is a normal `endpoints.api <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_ class that can be used exactly as descibed in the Google documentionat.
+    The value returned is a normal `endpoints.api <https://cloud.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_ class that can be used exactly as described in the Google documentation.
 
     ``name`` is the value of the ``name`` configuration field given for the endpoint. If no name is provided, it'll return the default endpoint.
 
@@ -127,10 +127,10 @@ def auto_service(cls=None, endpoint=None, **kwargs):
     If ``endpoint`` is None then the default endpoint will be used. If it is a string then the endpoint will be looked up in the registry using :func:`get`.
 
     The ``resource_name`` and ``path`` configuration options are automatically determined from the class name.
-    For example, "PostsService" becomes "posts" and "FuzzyBearsService" becomes "fuzzy_bears". These can be overriden by
-    passing in the respecitve kwargs.
+    For example, "PostsService" becomes "posts" and "FuzzyBearsService" becomes "fuzzy_bears". These can be overridden by
+    passing in the respective kwargs.
 
-    All kwargs are passed directly through to `endpoints.api_class <https://developers.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_.
+    All kwargs are passed directly through to `endpoints.api_class <https://cloud.google.com/appengine/docs/python/endpoints/create_api#creating_an_api_implemented_with_multiple_classes>`_.
 
     Examples::
 
@@ -161,14 +161,14 @@ def auto_service(cls=None, endpoint=None, **kwargs):
 
 def auto_method(func=None, returns=message_types.VoidMessage, name=None, http_method='POST', path=None, **kwargs):
     """
-    Uses introspection to automatically configure and expose an API method. This is sugar around `endpoints.method <https://developers.google.com/appengine/docs/python/endpoints/create_api#defining_an_api_method_endpointsmethod>`_.
+    Uses introspection to automatically configure and expose an API method. This is sugar around `endpoints.method <https://cloud.google.com/appengine/docs/python/endpoints/create_api#defining_an_api_method_endpointsmethod>`_.
 
     The ``returns`` argument is the response message type and is by default ``message_types.VoidMessage`` (an empty response).
     The ``name`` argument is optional and if left out will be set to the name of the function.
     The ``http_method`` argument is ``POST`` by default and can be changed if desired. Note that ``GET`` methods can not accept a request message.
     The remaining ``kwargs`` are passed directly to ``endpoints.method``.
 
-    This decorator uses introspection along with annotation to determine the request message type as well as any query string parameters for the method. This saves you the trouble of having to define a `ResourceContainer <https://developers.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_.
+    This decorator uses introspection along with annotation to determine the request message type as well as any query string parameters for the method. This saves you the trouble of having to define a `ResourceContainer <https://cloud.google.com/appengine/docs/python/endpoints/create_api#using_resourcecontainer_for_path_or_querystring_arguments>`_.
 
     Examples::
 

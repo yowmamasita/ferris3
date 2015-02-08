@@ -198,7 +198,7 @@ For reference, the final code for the tutorial is::
     @auto_service
     class PostsService(Service):
         list = hvild.list(Post)
-        paginated_list = hvild.paginated_list(Post)
+        paginated_list = hvild.paginated_list(Post, limit=3)
         get = hvild.get(Post)
         delete = hvild.delete(Post)
         insert = hvild.insert(Post)
