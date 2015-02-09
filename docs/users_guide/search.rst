@@ -137,16 +137,13 @@ A search method can be added to an endpoint service easily using the building bl
 
             # Check for errors
             if error:
-                raise ferris3.BadRequestException("Search error: %s" % data.error)
+                raise ferris3.BadRequestException("Search error: %s" % error)
 
             # Translate to entities
             entities = ferris3.search.to_entities(results)
 
             # Translate to list message
-            msg = ferris3.messages.serialize_list(entities, ListMessage)
-
-            # Set page token
-            msg.next_page_token = next_page_token
+            msg = ferris3.messages.serialize_list(PageListMessage, entities)
 
             return msg
 
