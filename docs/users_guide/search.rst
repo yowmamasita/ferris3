@@ -145,9 +145,6 @@ A search method can be added to an endpoint service easily using the building bl
             # Translate to list message
             msg = ferris3.messages.serialize_list(PageListMessage, entities)
 
-            # Set page token
-            msg.next_page_token = next_page_token
-
             return msg
 
 The :mod:`~ferris3.hvild` module has a generic implementation of this called :func:`~ferris3.hvild.searchable_list`.
