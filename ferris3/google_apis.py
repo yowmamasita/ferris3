@@ -3,7 +3,7 @@ import httplib2
 import logging
 import json
 import functools
-from apiclient import discovery, errors
+from googleapiclient import discovery, errors
 import hashlib
 
 
@@ -137,14 +137,11 @@ def _get_discovery_document(api, api_version, uri_template="https://www.googleap
 
 
 def _patch_discovery():
-    original_build = discovery.build
-
     def patched_build(serviceName, version, http=None, **kwargs):
         doc = _get_discovery_document(serviceName, version, http=http)
         return discovery.build_from_document(doc, http=http, **kwargs)
 
-    discovery.build = patched_build
-    setattr(discovery, '_build', original_build)
+    setattr(discovery, 'cached_build', patched_build)
 
 
 _patch_discovery()
