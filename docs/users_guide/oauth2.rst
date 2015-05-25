@@ -11,7 +11,7 @@ This documentation assumes you have an understanding of OAuth2. If you'd like to
 Endpoints Credentials
 ---------------------
 
-If your endpoint requires authentication then you can obtain the user's authorization token. You can use this to access Google APIs as long as the token was authorized for the appropriate scope. Do not that endpoints does not provide the refresh token so these access tokens are short-lived (at most 1 hour) so it is not advisable to store these credentials.
+If your endpoint requires authentication, then you can obtain the user's authorization token. You can use this to access Google APIs as long as the token was authorized for the appropriate scope. Do note that endpoints does not provide the refresh token so these access tokens are short-lived (at most 1 hour). As such, it is not advisable to store these credentials.
 
 .. autofunction:: get_endpoints_credentials
 
