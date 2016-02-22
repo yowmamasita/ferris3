@@ -22,7 +22,7 @@ def guestbook_list():
     return render_template("guestbook.html", greetings=greetings)
 ```
 
-[Read more about Ferris & Caching](http://ferris-framework.appspot.com/docs3alpha/users_guide/caching.html)
+[Read more about Ferris & Caching](http://ferris-framework.appspot.com/docs3/users_guide/caching.html)
 
 Using Cloud Endpoints has never been easier:
 
@@ -44,7 +44,7 @@ class BasicService(Service):
 
 ```
 
-[Read more about Ferris & Endpoints](http://ferris-framework.appspot.com/docs3alpha/users_guide/endpoints.html)
+[Read more about Ferris & Endpoints](http://ferris-framework.appspot.com/docs3/users_guide/endpoints.html)
 
 Getting Started & Installation
 ------------------------------
@@ -56,12 +56,12 @@ If you're using Ferris within an existing project or starting a new project with
 
 If you're starting from scratch and you're using webapp2 or just using Cloud Endpoints:
 * [Ferris 3 Project Skeleton](https://github.com/jonparrott/Ferris-3-Skeleton)
-* Go through the [Ferris 3 Tutorial](http://ferris-framework.appspot.com/docs3alpha/tutorial.html).
+* Go through the [Ferris 3 Tutorial](http://ferris-framework.appspot.com/docs3/tutorial.html).
 
 Documentation
 -------------
 
-The documentation is generated with sphinx and is available on the [ferris framework website](http://ferris-framework.appspot.com/docs3alpha/index.html).
+The documentation is generated with sphinx and is available on the [ferris framework website](http://ferris-framework.appspot.com/docs3/index.html).
 
 Contribution & Feedback
 -----------------------
