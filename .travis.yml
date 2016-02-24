@@ -1,0 +1,8 @@
+language: python
+python:
+  - "2.7"
+install:
+  - pip install -r requirements.txt
+  - wget https://storage.googleapis.com/appengine-sdks/featured/google_appengine_$APPENGINE_SDK_VERSION.zip
+  - unzip google_appengine_$APPENGINE_SDK_VERSION.zip
+script: nosetests --with-ferris tests --gae-sdk-path google_appengine
